@@ -1,0 +1,37 @@
+// Header Java code
+package org.example.compscript.parser;
+
+import java_cup.runtime.*;
+
+// Class name
+parser code {:
+
+    Lexer lex;
+    Parser(Lexer lex){this.lex = lex;}
+
+    public void syntax_error(Symbol s){}
+
+    public void unrecovered_syntax_error (Symbol s){}
+
+:}
+
+// Terminals
+// terminal String SINGLE_LINE_COMMENT, BLOCK_COMMENT, WHOLE, DOUBLE, BOOLEAN, CHAR, STRING;
+terminal String SINGLE_LINE_COMMENT, BLOCK_COMMENT, WHOLE, DOUBLE, BOOLEAN, CHAR, STRING, ADDITION, MULTIPLICATION, SUBSTRACTION, DIVISION, POWER, ROOT, MODULO, END, ERROR;
+
+// Non-terminals
+non terminal s, s1;
+
+// Initial state
+start with s;
+
+// Productions
+s ::=
+    s s1
+    |
+    s1
+    ;
+
+s1 ::=
+    error s1
+    ;
