@@ -1,4 +1,4 @@
-package org.example.compscript.exceptions;
+package org.example.compscript.parser.exceptions;
 
 public class Error {
     private String type;

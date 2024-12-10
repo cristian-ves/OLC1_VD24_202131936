@@ -7,8 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import org.example.compscript.parser.Lexer;
-import org.example.compscript.parser.Parser;
+import org.example.compscript.parser.analisys.Lexer;
+import org.example.compscript.parser.analisys.Parser;
 import org.example.compscript.ui.Input;
 
 import java.io.BufferedReader;

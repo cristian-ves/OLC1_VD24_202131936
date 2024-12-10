@@ -3,7 +3,7 @@
 // source: lexer.jflex
 
 // Declarations
-package org.example.compscript.parser;
+package org.example.compscript.parser.analisys;
 
 import java_cup.runtime.*;
 
