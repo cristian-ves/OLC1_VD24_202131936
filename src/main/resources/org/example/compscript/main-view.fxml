@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.compscript.controller">
@@ -35,7 +34,7 @@
       </MenuBar>
       <Label layoutX="30.0" layoutY="41.0" prefHeight="16.0" prefWidth="50.0" text="Input" />
       <Label layoutX="815.0" layoutY="41.0" prefHeight="16.0" prefWidth="50.0" text="Output" />
-      <ScrollPane layoutX="800.0" layoutY="57.0" prefHeight="725.0" prefWidth="770.0" />
+      <AnchorPane fx:id="anchorPaneWithConsole" layoutX="800.0" layoutY="57.0" prefHeight="725.0" prefWidth="770.0" />
       <AnchorPane fx:id="anchorPaneWithCodeArea" layoutX="14.0" layoutY="57.0" prefHeight="725.0" prefWidth="770.0" />
    </children>
 </AnchorPane>

@@ -1,9 +1,9 @@
-package org.example.compscript.parser.exceptions;
+package org.example.compscript.parser.expresions;
 
 import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.symbol.Tree;
 import org.example.compscript.parser.symbol.Type;
-import org.example.compscript.parser.symbol.symbolsTable;
+import org.example.compscript.parser.symbol.SymbolsTable;
 
 public class Native extends Instruction {
 
@@ -15,7 +15,7 @@ public class Native extends Instruction {
     }
 
     @Override
-    public Object interpret(Tree tree, symbolsTable symbolsTable) {
+    public Object interpret(Tree tree, SymbolsTable symbolsTable) {
         return this.value;
     }
 }

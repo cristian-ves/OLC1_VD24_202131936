@@ -16,6 +16,7 @@ public class sym {
   public static final int CONST = 19;
   public static final int CHAR = 7;
   public static final int EQUALS = 34;
+  public static final int UMINUS = 52;
   public static final int PAR_END = 46;
   public static final int NOT_EQUAL = 37;
   public static final int BLOCK_COMMENT = 3;
@@ -23,13 +24,14 @@ public class sym {
   public static final int DOUBLE = 5;
   public static final int CONTINUE = 31;
   public static final int FOR = 28;
+  public static final int MINUS = 11;
   public static final int GREATER_THAN = 40;
   public static final int MATCH = 25;
   public static final int NOT = 44;
   public static final int AND = 43;
-  public static final int SUBSTRACTION = 11;
   public static final int BRA_START = 47;
   public static final int OR = 42;
+  public static final int PLUS = 9;
   public static final int IF = 23;
   public static final int ID = 51;
   public static final int DOT = 35;
@@ -46,7 +48,6 @@ public class sym {
   public static final int COLON = 17;
   public static final int ELSE = 24;
   public static final int WHILE = 27;
-  public static final int ADDITION = 9;
   public static final int DEFAULT = 26;
   public static final int LET = 20;
   public static final int END = 16;
@@ -70,9 +71,9 @@ public class sym {
   "BOOLEAN",
   "CHAR",
   "STRING",
-  "ADDITION",
+  "PLUS",
   "MULTIPLICATION",
-  "SUBSTRACTION",
+  "MINUS",
   "DIVISION",
   "POWER",
   "ROOT",
@@ -112,7 +113,8 @@ public class sym {
   "BRA_END",
   "INCREMENT",
   "DECREASE",
-  "ID"
+  "ID",
+  "UMINUS"
   };
 }
 

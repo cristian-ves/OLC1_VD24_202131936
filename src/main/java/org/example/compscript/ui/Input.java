@@ -8,14 +8,10 @@ import org.fxmisc.richtext.CodeArea;
 
 public class Input extends CodeArea {
 
-    private int codeTextAreaSize;
-
     public Input() {}
 
     public void createCodeArea(Parent root) {
         AnchorPane anchorPane = (AnchorPane) root.lookup("#anchorPaneWithCodeArea");
-
-        codeTextAreaSize = 0;
 
         VirtualizedScrollPane<CodeArea> scrollPane = new VirtualizedScrollPane<>(this);
 

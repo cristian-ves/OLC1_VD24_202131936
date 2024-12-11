@@ -2,7 +2,7 @@ package org.example.compscript.parser.abstract_;
 
 import org.example.compscript.parser.symbol.Tree;
 import org.example.compscript.parser.symbol.Type;
-import org.example.compscript.parser.symbol.symbolsTable;
+import org.example.compscript.parser.symbol.SymbolsTable;
 
 public abstract class Instruction {
 
@@ -16,6 +16,6 @@ public abstract class Instruction {
         this.column = column;
     }
 
-    public abstract Object interpret(Tree tree, symbolsTable symbolsTable);
+    public abstract Object interpret(Tree tree, SymbolsTable symbolsTable);
 
 }

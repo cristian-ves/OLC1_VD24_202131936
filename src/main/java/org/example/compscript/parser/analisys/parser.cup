@@ -1,7 +1,18 @@
 // Header Java code
-package org.example.compscript.parser;
+package org.example.compscript.parser.analisys;
 
 import java_cup.runtime.*;
+import java.util.LinkedList;
+import org.example.compscript.parser.abstract_.Instruction;
+import org.example.compscript.parser.symbol.*;
+import org.example.compscript.parser.symbol.Symbol;
+
+// Instructions
+import org.example.compscript.parser.instructions.Print;
+
+// Expressions
+import org.example.compscript.parser.expresions.*;
+
 
 // Class name
 parser code {:
@@ -17,24 +28,41 @@ parser code {:
 
 // Terminals
 terminal String SINGLE_LINE_COMMENT, BLOCK_COMMENT, WHOLE, DOUBLE, BOOLEAN, CHAR, STRING;
-terminal String ADDITION, MULTIPLICATION, SUBSTRACTION, DIVISION, POWER, ROOT, MODULO, END, COLON, ERROR;
+terminal String PLUS, MULTIPLICATION, MINUS, DIVISION, POWER, ROOT, MODULO, END, COLON, ERROR;
 terminal String CONST, LET, CAST, AS, IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE, CONSOLE, LOG, EQUALS;
 terminal String DOT, EQUALS_TO, NOT_EQUAL, LESS_THAN, LESS_EQUAL_THAN, GREATER_THAN, GREATER_EQUAL_THAN, OR, AND, NOT;
-terminal String PAR_START, PAR_END, BRA_START, BRA_END, INCREMENT, DECREASE, ID;
+terminal String PAR_START, PAR_END, BRA_START, BRA_END, INCREMENT, DECREASE, ID, UMINUS;
 
 // Non-terminals
-non terminal s, s1;
+non terminal LinkedList<Instruction> s, INSTRUCTIONS;
+non terminal Instruction INSTRUCTION, PRINT;
+non terminal Instruction EXPRESION;
+
+// precedences
+precedence left PLUS, MINUS;
+precedence right UMINUS;
 
 // Initial state
 start with s;
 
 // Productions
-s ::=
-    s s1
-    |
-    s1
-    ;
+s ::= INSTRUCTIONS:a {: RESULT = a; :}
+;
 
-s1 ::=
-    error s1
-    ;
+INSTRUCTIONS ::= INSTRUCTIONS:a INSTRUCTION:b {: RESULT = a; RESULT.add(b); :}
+               | INSTRUCTION:a                {: RESULT = new LinkedList<Instruction>(); RESULT.add(a); :}
+;
+
+INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
+;
+
+PRINT ::= CONSOLE DOT LOG PAR_START EXPRESION:a PAR_END {: RESULT = new Print(a, aleft, aright); :}
+;
+
+EXPRESION ::= MINUS EXPRESION:a             {: RESULT = new UnitaryNegation(a, aleft, aright); :} %prec UMINUS
+            | EXPRESION:a PLUS EXPRESION:b  {: RESULT = new Addition(a, b, aleft, aright); :}
+            | EXPRESION:a MINUS EXPRESION:b {: RESULT = new Substraction(a, b, aleft, aright); :}
+            | WHOLE:a                       {: RESULT = new Native(Integer.parseInt(a), new Type(dataType.WHOLE), aleft, aright); :}
+            | DOUBLE:a                      {: RESULT = new Native(new Double(a), new Type(dataType.DOUBLE), aleft, aright); :}
+            | PAR_START EXPRESION:a PAR_END {: RESULT = a; :}
+;
