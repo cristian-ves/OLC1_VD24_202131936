@@ -9,57 +9,57 @@ package org.example.compscript.parser.analisys;
 public class sym {
   /* terminals */
   public static final int CAST = 7;
-  public static final int WHOLE = 26;
-  public static final int GREATER_EQUAL_THAN = 51;
-  public static final int POWER = 43;
-  public static final int INCREMENT = 23;
+  public static final int WHOLE = 23;
+  public static final int GREATER_EQUAL_THAN = 48;
+  public static final int POWER = 40;
+  public static final int INCREMENT = 20;
   public static final int CONST = 5;
-  public static final int CHAR = 30;
-  public static final int EQUALS = 40;
-  public static final int UMINUS = 39;
-  public static final int PAR_END = 36;
-  public static final int NOT_EQUAL = 47;
+  public static final int CHAR = 27;
+  public static final int EQUALS = 37;
+  public static final int UMINUS = 36;
+  public static final int PAR_END = 33;
+  public static final int NOT_EQUAL = 44;
   public static final int BLOCK_COMMENT = 3;
-  public static final int LESS_EQUAL_THAN = 50;
-  public static final int DOUBLE = 28;
+  public static final int LESS_EQUAL_THAN = 47;
+  public static final int DOUBLE = 25;
   public static final int CONTINUE = 17;
-  public static final int MINUS = 38;
+  public static final int MINUS = 35;
   public static final int FOR = 14;
-  public static final int GREATER_THAN = 49;
+  public static final int GREATER_THAN = 46;
   public static final int MATCH = 11;
-  public static final int NOT = 20;
-  public static final int AND = 19;
-  public static final int BRA_START = 21;
-  public static final int OR = 18;
-  public static final int PLUS = 37;
+  public static final int NOT = 51;
+  public static final int AND = 50;
+  public static final int BRA_START = 18;
+  public static final int OR = 49;
+  public static final int PLUS = 34;
   public static final int IF = 9;
-  public static final int DOT = 33;
-  public static final int ID = 25;
+  public static final int DOT = 30;
+  public static final int ID = 22;
   public static final int EOF = 0;
-  public static final int BOOLEAN = 29;
-  public static final int EQUALS_TO = 46;
+  public static final int BOOLEAN = 26;
+  public static final int EQUALS_TO = 43;
   public static final int error = 1;
-  public static final int BRA_END = 22;
-  public static final int MODULO = 45;
-  public static final int DECREASE = 24;
+  public static final int BRA_END = 19;
+  public static final int MODULO = 42;
+  public static final int DECREASE = 21;
   public static final int BREAK = 16;
-  public static final int LOG = 34;
+  public static final int LOG = 31;
   public static final int COLON = 4;
   public static final int ELSE = 10;
   public static final int WHILE = 13;
   public static final int DEFAULT = 12;
   public static final int LET = 6;
-  public static final int END = 31;
-  public static final int ROOT = 44;
-  public static final int STRING = 27;
+  public static final int END = 28;
+  public static final int ROOT = 41;
+  public static final int STRING = 24;
   public static final int AS = 8;
-  public static final int DIVISION = 42;
-  public static final int LESS_THAN = 48;
-  public static final int MULTIPLICATION = 41;
+  public static final int DIVISION = 39;
+  public static final int LESS_THAN = 45;
+  public static final int MULTIPLICATION = 38;
   public static final int DO = 15;
-  public static final int CONSOLE = 32;
-  public static final int PAR_START = 35;
+  public static final int CONSOLE = 29;
   public static final int SINGLE_LINE_COMMENT = 2;
+  public static final int PAR_START = 32;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -79,9 +79,6 @@ public class sym {
   "DO",
   "BREAK",
   "CONTINUE",
-  "OR",
-  "AND",
-  "NOT",
   "BRA_START",
   "BRA_END",
   "INCREMENT",
@@ -112,7 +109,10 @@ public class sym {
   "LESS_THAN",
   "GREATER_THAN",
   "LESS_EQUAL_THAN",
-  "GREATER_EQUAL_THAN"
+  "GREATER_EQUAL_THAN",
+  "OR",
+  "AND",
+  "NOT"
   };
 }
 

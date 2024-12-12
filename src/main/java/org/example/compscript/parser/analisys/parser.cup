@@ -14,6 +14,7 @@ import org.example.compscript.parser.instructions.Print;
 import org.example.compscript.parser.expresions.Native;
 import org.example.compscript.parser.expresions.operators.relational.*;
 import org.example.compscript.parser.expresions.operators.arithmetic.*;
+import org.example.compscript.parser.expresions.operators.logic.*;
 
 
 // Class name
@@ -35,23 +36,23 @@ action code {:
 terminal String SINGLE_LINE_COMMENT, BLOCK_COMMENT;
 terminal String COLON;
 terminal String CONST, LET, CAST, AS, IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
-terminal String OR, AND, NOT;
 terminal String BRA_START, BRA_END, INCREMENT, DECREASE, ID;
 
 terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR;
 terminal END, CONSOLE, DOT, LOG;
 terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
 terminal EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
+terminal OR, AND, NOT;
 
 // Non-terminals
-// non terminal LinkedList<Instruction> s, INSTRUCTIONS;
-// non terminal Instruction INSTRUCTION, PRINT;
-// non terminal Instruction EXPRESSION;
 nonterminal LinkedList<Instruction> S, INSTRUCTIONS;
 nonterminal Instruction INSTRUCTION, PRINT;
 nonterminal Instruction EXPRESSION;
 
 // precedences
+precedence left OR;
+precedence left AND;
+precedence right NOT;
 precedence left EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
 precedence left PLUS, MINUS;
 precedence left MULTIPLICATION, DIVISION, MODULO;
@@ -89,6 +90,9 @@ EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, arig
             | EXPRESSION:a GREATER_THAN EXPRESSION:b {: RESULT = new GreaterThan(a, b, aleft, aright); :}
             | EXPRESSION:a LESS_EQUAL_THAN EXPRESSION:b {: RESULT = new LessEqualsThan(a, b, aleft, aright); :}
             | EXPRESSION:a GREATER_EQUAL_THAN EXPRESSION:b {: RESULT = new GreaterEqualsThan(a, b, aleft, aright); :}
+            | EXPRESSION:a AND EXPRESSION:b {: RESULT = new And(a, b, aleft, aright); :}
+            | EXPRESSION:a OR EXPRESSION:b {: RESULT = new Or(a, b, aleft, aright); :}
+            | NOT EXPRESSION:a {: RESULT = new Not(a, aleft, aright); :}
             | WHOLE:a                  {: RESULT = new Native(Integer.parseInt(a),new Type(dataType.WHOLE), aleft, aright); :}
             | STRING:a {: RESULT = new Native(a, new Type(dataType.STRING), aleft, aright); :}
             | DOUBLE:a                 {: RESULT = new Native(new Double(a),new Type(dataType.DOUBLE), aleft, aright); :}
