@@ -1,4 +1,4 @@
-package org.example.compscript.parser.expresions;
+package org.example.compscript.parser.expresions.operators.arithmetic;
 
 import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.exceptions.CompError;
@@ -8,12 +8,12 @@ import org.example.compscript.parser.symbol.Tree;
 import org.example.compscript.parser.symbol.Type;
 import org.example.compscript.parser.symbol.dataType;
 
-public class Division extends Instruction {
+public class Root extends Instruction {
 
     private Instruction opLeft;
     private Instruction opRight;
 
-    public Division(Instruction opLeft, Instruction opRight, int line, int column) {
+    public Root(Instruction opLeft, Instruction opRight, int line, int column) {
         super(new Type(dataType.VOID), line, column);
         this.opLeft = opLeft;
         this.opRight = opRight;
@@ -21,7 +21,7 @@ public class Division extends Instruction {
 
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
-        String desc = "Invalid division between types";
+        String desc = "Invalid root operation between types";
 
         var leftValue = this.opLeft.interpret(tree, symbolsTable);
         if (leftValue instanceof CompError) {
@@ -41,15 +41,11 @@ public class Division extends Instruction {
                 switch (rightType) {
                     case WHOLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return (double) (int) leftValue / (int) rightValue;
+                        return Math.pow ((int) leftValue, (1.0 / (int) rightValue));
                     }
                     case DOUBLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return (int) leftValue / (double) rightValue;
-                    }
-                    case CHAR -> {
-                        this.type.setType(dataType.DOUBLE);
-                        return (double) (int) leftValue / (char) rightValue;
+                        return Math.pow ((int) leftValue, (1.0 / (double) rightValue));
                     }
                     default -> {
                         return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);
@@ -60,30 +56,11 @@ public class Division extends Instruction {
                 switch (rightType) {
                     case WHOLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return (double) leftValue / (int) rightValue;
+                        return Math.pow ((double) leftValue, (1.0 / (int) rightValue));
                     }
                     case DOUBLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return (double) leftValue / (double) rightValue;
-                    }
-                    case CHAR -> {
-                        this.type.setType(dataType.DOUBLE);
-                        return (double) leftValue / (char) rightValue;
-                    }
-                    default -> {
-                        return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);
-                    }
-                }
-            }
-            case CHAR -> {
-                switch (rightType) {
-                    case WHOLE -> {
-                        this.type.setType(dataType.WHOLE);
-                        return (double) (char) leftValue / (int) rightValue;
-                    }
-                    case DOUBLE -> {
-                        this.type.setType(dataType.DOUBLE);
-                        return (char) leftValue / (double) rightValue;
+                        return Math.pow ((double) leftValue, (1.0 / (double) rightValue));
                     }
                     default -> {
                         return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);

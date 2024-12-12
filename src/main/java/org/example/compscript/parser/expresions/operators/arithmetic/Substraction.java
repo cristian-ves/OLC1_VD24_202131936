@@ -1,4 +1,4 @@
-package org.example.compscript.parser.expresions;
+package org.example.compscript.parser.expresions.operators.arithmetic;
 
 import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.exceptions.CompError;
@@ -8,12 +8,12 @@ import org.example.compscript.parser.symbol.Tree;
 import org.example.compscript.parser.symbol.Type;
 import org.example.compscript.parser.symbol.dataType;
 
-public class Root extends Instruction {
+public class Substraction extends Instruction {
 
     private Instruction opLeft;
     private Instruction opRight;
 
-    public Root(Instruction opLeft, Instruction opRight, int line, int column) {
+    public Substraction(Instruction opLeft, Instruction opRight, int line, int column) {
         super(new Type(dataType.VOID), line, column);
         this.opLeft = opLeft;
         this.opRight = opRight;
@@ -21,16 +21,16 @@ public class Root extends Instruction {
 
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
-        String desc = "Invalid root operation between types";
+        String desc = "Invalid sum between types";
 
         var leftValue = this.opLeft.interpret(tree, symbolsTable);
         if (leftValue instanceof CompError) {
-            return  leftValue;
+            return leftValue;
         }
 
         var rightValue = this.opRight.interpret(tree, symbolsTable);
         if (rightValue instanceof CompError) {
-            return  opRight;
+            return rightValue;
         }
 
         var leftType = opLeft.type.getType();
@@ -40,33 +40,59 @@ public class Root extends Instruction {
             case WHOLE -> {
                 switch (rightType) {
                     case WHOLE -> {
-                        this.type.setType(dataType.DOUBLE);
-                        return Math.pow ((int) leftValue, (1.0 / (int) rightValue));
+                        this.type.setType(dataType.WHOLE);
+                        return (int) leftValue - (int) rightValue;
                     }
                     case DOUBLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return Math.pow ((int) leftValue, (1.0 / (double) rightValue));
+                        return (int) leftValue - (double) rightValue;
+                    }
+                    case CHAR -> {
+                        this.type.setType(dataType.WHOLE);
+                        return (int) leftValue - (char) rightValue;
                     }
                     default -> {
                         return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);
                     }
                 }
             }
+
             case DOUBLE -> {
                 switch (rightType) {
                     case WHOLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return Math.pow ((double) leftValue, (1.0 / (int) rightValue));
+                        return (double) leftValue - (int) rightValue;
                     }
                     case DOUBLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return Math.pow ((double) leftValue, (1.0 / (double) rightValue));
+                        return (double) leftValue - (double) rightValue;
+                    }
+                    case CHAR -> {
+                        this.type.setType(dataType.DOUBLE);
+                        return (double) leftValue - (char) rightValue;
                     }
                     default -> {
                         return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);
                     }
                 }
             }
+
+            case CHAR -> {
+                switch (rightType) {
+                    case WHOLE -> {
+                        this.type.setType(dataType.WHOLE);
+                        return (char) leftValue - (int) rightValue;
+                    }
+                    case DOUBLE -> {
+                        this.type.setType(dataType.DOUBLE);
+                        return (char) leftValue - (double) rightValue;
+                    }
+                    default -> {
+                        return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);
+                    }
+                }
+            }
+
             default -> {
                 return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);
             }

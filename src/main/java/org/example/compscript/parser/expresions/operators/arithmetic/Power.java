@@ -1,4 +1,4 @@
-package org.example.compscript.parser.expresions;
+package org.example.compscript.parser.expresions.operators.arithmetic;
 
 import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.exceptions.CompError;
@@ -8,12 +8,12 @@ import org.example.compscript.parser.symbol.Tree;
 import org.example.compscript.parser.symbol.Type;
 import org.example.compscript.parser.symbol.dataType;
 
-public class Modulo extends Instruction{
+public class Power extends Instruction {
 
     private Instruction opLeft;
     private Instruction opRight;
 
-    public Modulo(Instruction opLeft, Instruction opRight, int line, int column) {
+    public Power(Instruction opLeft, Instruction opRight, int line, int column) {
         super(new Type(dataType.VOID), line, column);
         this.opLeft = opLeft;
         this.opRight = opRight;
@@ -40,12 +40,12 @@ public class Modulo extends Instruction{
             case WHOLE -> {
                 switch (rightType) {
                     case WHOLE -> {
-                        this.type.setType(dataType.DOUBLE);
-                        return (double) (int) leftValue % (int) rightValue;
+                        this.type.setType(dataType.WHOLE);
+                        return (int) Math.pow ((int) leftValue, (int) rightValue);
                     }
                     case DOUBLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return (int) leftValue % (double) rightValue;
+                        return Math.pow ((int) leftValue, (double) rightValue);
                     }
                     default -> {
                         return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);
@@ -56,11 +56,11 @@ public class Modulo extends Instruction{
                 switch (rightType) {
                     case WHOLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return (double) leftValue % (int) rightValue;
+                        return Math.pow ((double) leftValue, (int) rightValue);
                     }
                     case DOUBLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return (double) leftValue % (double) rightValue;
+                        return Math.pow ((double) leftValue, (double) rightValue);
                     }
                     default -> {
                         return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);

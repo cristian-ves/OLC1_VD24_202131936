@@ -1,4 +1,4 @@
-package org.example.compscript.parser.expresions;
+package org.example.compscript.parser.expresions.operators.arithmetic;
 
 import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.exceptions.CompError;

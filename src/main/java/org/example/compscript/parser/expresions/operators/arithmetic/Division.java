@@ -1,4 +1,4 @@
-package org.example.compscript.parser.expresions;
+package org.example.compscript.parser.expresions.operators.arithmetic;
 
 import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.exceptions.CompError;
@@ -8,12 +8,12 @@ import org.example.compscript.parser.symbol.Tree;
 import org.example.compscript.parser.symbol.Type;
 import org.example.compscript.parser.symbol.dataType;
 
-public class Multiplication extends Instruction {
+public class Division extends Instruction {
 
     private Instruction opLeft;
     private Instruction opRight;
 
-    public Multiplication(Instruction opLeft, Instruction opRight, int line, int column) {
+    public Division(Instruction opLeft, Instruction opRight, int line, int column) {
         super(new Type(dataType.VOID), line, column);
         this.opLeft = opLeft;
         this.opRight = opRight;
@@ -21,7 +21,7 @@ public class Multiplication extends Instruction {
 
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
-        String desc = "Invalid multiplication between types";
+        String desc = "Invalid division between types";
 
         var leftValue = this.opLeft.interpret(tree, symbolsTable);
         if (leftValue instanceof CompError) {
@@ -40,16 +40,16 @@ public class Multiplication extends Instruction {
             case WHOLE -> {
                 switch (rightType) {
                     case WHOLE -> {
-                        this.type.setType(dataType.WHOLE);
-                        return (int) leftValue * (int) rightValue;
+                        this.type.setType(dataType.DOUBLE);
+                        return (double) (int) leftValue / (int) rightValue;
                     }
                     case DOUBLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return (int) leftValue * (double) rightValue;
+                        return (int) leftValue / (double) rightValue;
                     }
                     case CHAR -> {
-                        this.type.setType(dataType.WHOLE);
-                        return (int) leftValue * (char) rightValue;
+                        this.type.setType(dataType.DOUBLE);
+                        return (double) (int) leftValue / (char) rightValue;
                     }
                     default -> {
                         return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);
@@ -60,15 +60,15 @@ public class Multiplication extends Instruction {
                 switch (rightType) {
                     case WHOLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return (double) leftValue * (int) rightValue;
+                        return (double) leftValue / (int) rightValue;
                     }
                     case DOUBLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return (double) leftValue * (double) rightValue;
+                        return (double) leftValue / (double) rightValue;
                     }
                     case CHAR -> {
                         this.type.setType(dataType.DOUBLE);
-                        return (double) leftValue * (char) rightValue;
+                        return (double) leftValue / (char) rightValue;
                     }
                     default -> {
                         return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);
@@ -79,11 +79,11 @@ public class Multiplication extends Instruction {
                 switch (rightType) {
                     case WHOLE -> {
                         this.type.setType(dataType.WHOLE);
-                        return (char) leftValue * (int) rightValue;
+                        return (double) (char) leftValue / (int) rightValue;
                     }
                     case DOUBLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return (char) leftValue * (double) rightValue;
+                        return (char) leftValue / (double) rightValue;
                     }
                     default -> {
                         return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);
@@ -96,4 +96,5 @@ public class Multiplication extends Instruction {
         }
 
     }
+
 }

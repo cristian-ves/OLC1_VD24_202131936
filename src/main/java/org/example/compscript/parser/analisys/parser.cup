@@ -11,7 +11,9 @@ import org.example.compscript.parser.symbol.Symbol;
 import org.example.compscript.parser.instructions.Print;
 
 // Expressions
-import org.example.compscript.parser.expresions.*;
+import org.example.compscript.parser.expresions.Native;
+import org.example.compscript.parser.expresions.operators.relational.*;
+import org.example.compscript.parser.expresions.operators.arithmetic.*;
 
 
 // Class name
@@ -33,12 +35,13 @@ action code {:
 terminal String SINGLE_LINE_COMMENT, BLOCK_COMMENT;
 terminal String COLON;
 terminal String CONST, LET, CAST, AS, IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
-terminal String NOT_EQUAL, LESS_THAN, LESS_EQUAL_THAN, GREATER_THAN, GREATER_EQUAL_THAN, OR, AND, NOT;
+terminal String OR, AND, NOT;
 terminal String BRA_START, BRA_END, INCREMENT, DECREASE, ID;
 
 terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR;
 terminal END, CONSOLE, DOT, LOG;
-terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, EQUALS_TO, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
+terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
+terminal EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
 
 // Non-terminals
 // non terminal LinkedList<Instruction> s, INSTRUCTIONS;
@@ -49,7 +52,7 @@ nonterminal Instruction INSTRUCTION, PRINT;
 nonterminal Instruction EXPRESSION;
 
 // precedences
-precedence left EQUALS_TO;
+precedence left EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
 precedence left PLUS, MINUS;
 precedence left MULTIPLICATION, DIVISION, MODULO;
 precedence nonassoc POWER, ROOT;
@@ -81,6 +84,11 @@ EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, arig
             | EXPRESSION:a ROOT EXPRESSION:b {: RESULT = new Root(a, b, aleft, aright); :}
             | EXPRESSION:a MODULO EXPRESSION:b {: RESULT = new Modulo(a, b, aleft, aright); :}
             | EXPRESSION:a EQUALS_TO EXPRESSION:b {: RESULT = new EqualsTo(a, b, aleft, aright); :}
+            | EXPRESSION:a NOT_EQUAL EXPRESSION:b {: RESULT = new NotEqualsTo(a, b, aleft, aright); :}
+            | EXPRESSION:a LESS_THAN EXPRESSION:b {: RESULT = new LessThan(a, b, aleft, aright); :}
+            | EXPRESSION:a GREATER_THAN EXPRESSION:b {: RESULT = new GreaterThan(a, b, aleft, aright); :}
+            | EXPRESSION:a LESS_EQUAL_THAN EXPRESSION:b {: RESULT = new LessEqualsThan(a, b, aleft, aright); :}
+            | EXPRESSION:a GREATER_EQUAL_THAN EXPRESSION:b {: RESULT = new GreaterEqualsThan(a, b, aleft, aright); :}
             | WHOLE:a                  {: RESULT = new Native(Integer.parseInt(a),new Type(dataType.WHOLE), aleft, aright); :}
             | STRING:a {: RESULT = new Native(a, new Type(dataType.STRING), aleft, aright); :}
             | DOUBLE:a                 {: RESULT = new Native(new Double(a),new Type(dataType.DOUBLE), aleft, aright); :}
