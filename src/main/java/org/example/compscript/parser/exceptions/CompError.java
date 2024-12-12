@@ -1,12 +1,12 @@
 package org.example.compscript.parser.exceptions;
 
-public class Error {
+public class CompError {
     private ErrorType type;
     private String desc;
     private int line;
     private int column;
 
-    public Error(ErrorType type, String desc, int line, int column) {
+    public CompError(ErrorType type, String desc, int line, int column) {
         this.type = type;
         this.desc = desc;
         this.line = line;

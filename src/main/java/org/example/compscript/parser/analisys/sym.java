@@ -8,57 +8,56 @@ package org.example.compscript.parser.analisys;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int CAST = 21;
-  public static final int WHOLE = 4;
-  public static final int INCREMENT = 49;
-  public static final int GREATER_EQUAL_THAN = 41;
-  public static final int POWER = 13;
-  public static final int CONST = 19;
-  public static final int CHAR = 7;
-  public static final int EQUALS = 34;
-  public static final int UMINUS = 52;
+  public static final int CAST = 12;
+  public static final int WHOLE = 36;
+  public static final int POWER = 6;
+  public static final int INCREMENT = 33;
+  public static final int GREATER_EQUAL_THAN = 27;
+  public static final int CHAR = 40;
+  public static final int CONST = 10;
+  public static final int EQUALS = 50;
+  public static final int UMINUS = 49;
   public static final int PAR_END = 46;
-  public static final int NOT_EQUAL = 37;
   public static final int BLOCK_COMMENT = 3;
-  public static final int LESS_EQUAL_THAN = 39;
-  public static final int DOUBLE = 5;
-  public static final int CONTINUE = 31;
-  public static final int FOR = 28;
-  public static final int MINUS = 11;
-  public static final int GREATER_THAN = 40;
-  public static final int MATCH = 25;
-  public static final int NOT = 44;
-  public static final int AND = 43;
-  public static final int BRA_START = 47;
-  public static final int OR = 42;
-  public static final int PLUS = 9;
-  public static final int IF = 23;
-  public static final int ID = 51;
-  public static final int DOT = 35;
+  public static final int NOT_EQUAL = 23;
+  public static final int DOUBLE = 38;
+  public static final int LESS_EQUAL_THAN = 25;
+  public static final int CONTINUE = 22;
+  public static final int MINUS = 48;
+  public static final int FOR = 19;
+  public static final int MATCH = 16;
+  public static final int GREATER_THAN = 26;
+  public static final int NOT = 30;
+  public static final int AND = 29;
+  public static final int BRA_START = 31;
+  public static final int OR = 28;
+  public static final int PLUS = 47;
+  public static final int IF = 14;
+  public static final int DOT = 43;
+  public static final int ID = 35;
+  public static final int BOOLEAN = 39;
   public static final int EOF = 0;
-  public static final int BOOLEAN = 6;
-  public static final int EQUALS_TO = 36;
-  public static final int BRA_END = 48;
+  public static final int EQUALS_TO = 51;
   public static final int error = 1;
-  public static final int MODULO = 15;
-  public static final int DECREASE = 50;
-  public static final int BREAK = 30;
-  public static final int ERROR = 18;
-  public static final int LOG = 33;
-  public static final int COLON = 17;
-  public static final int ELSE = 24;
-  public static final int WHILE = 27;
-  public static final int DEFAULT = 26;
-  public static final int LET = 20;
-  public static final int END = 16;
-  public static final int ROOT = 14;
-  public static final int STRING = 8;
-  public static final int AS = 22;
-  public static final int DIVISION = 12;
-  public static final int LESS_THAN = 38;
-  public static final int MULTIPLICATION = 10;
-  public static final int DO = 29;
-  public static final int CONSOLE = 32;
+  public static final int BRA_END = 32;
+  public static final int MODULO = 8;
+  public static final int DECREASE = 34;
+  public static final int BREAK = 21;
+  public static final int LOG = 44;
+  public static final int COLON = 9;
+  public static final int ELSE = 15;
+  public static final int WHILE = 18;
+  public static final int DEFAULT = 17;
+  public static final int LET = 11;
+  public static final int END = 41;
+  public static final int ROOT = 7;
+  public static final int STRING = 37;
+  public static final int AS = 13;
+  public static final int DIVISION = 5;
+  public static final int LESS_THAN = 24;
+  public static final int MULTIPLICATION = 4;
+  public static final int CONSOLE = 42;
+  public static final int DO = 20;
   public static final int PAR_START = 45;
   public static final int SINGLE_LINE_COMMENT = 2;
   public static final String[] terminalNames = new String[] {
@@ -66,21 +65,12 @@ public class sym {
   "error",
   "SINGLE_LINE_COMMENT",
   "BLOCK_COMMENT",
-  "WHOLE",
-  "DOUBLE",
-  "BOOLEAN",
-  "CHAR",
-  "STRING",
-  "PLUS",
   "MULTIPLICATION",
-  "MINUS",
   "DIVISION",
   "POWER",
   "ROOT",
   "MODULO",
-  "END",
   "COLON",
-  "ERROR",
   "CONST",
   "LET",
   "CAST",
@@ -94,11 +84,6 @@ public class sym {
   "DO",
   "BREAK",
   "CONTINUE",
-  "CONSOLE",
-  "LOG",
-  "EQUALS",
-  "DOT",
-  "EQUALS_TO",
   "NOT_EQUAL",
   "LESS_THAN",
   "LESS_EQUAL_THAN",
@@ -107,14 +92,27 @@ public class sym {
   "OR",
   "AND",
   "NOT",
-  "PAR_START",
-  "PAR_END",
   "BRA_START",
   "BRA_END",
   "INCREMENT",
   "DECREASE",
   "ID",
-  "UMINUS"
+  "WHOLE",
+  "STRING",
+  "DOUBLE",
+  "BOOLEAN",
+  "CHAR",
+  "END",
+  "CONSOLE",
+  "DOT",
+  "LOG",
+  "PAR_START",
+  "PAR_END",
+  "PLUS",
+  "MINUS",
+  "UMINUS",
+  "EQUALS",
+  "EQUALS_TO"
   };
 }
 

@@ -110,12 +110,15 @@ digit = [0-9]
         return new Symbol(sym.BOOLEAN, yyline, yycolumn, yytext()); 
     }
     "'"([^'\\]|\\[nt\"\\\\'])"'" { 
-        // System.out.println("Recognized CHAR " + yytext());
-        return new Symbol(sym.CHAR, yyline, yycolumn, yytext()); 
+        String chr = yytext();
+        chr = chr.substring(1, chr.length() -1);
+        return new Symbol(sym.CHAR, yyline, yycolumn, chr); 
     }
     "\""([^\"\\]|\\[nt\"\\\\'])*"\"" { 
         // System.out.println("Recognized STRING " + yytext());
-        return new Symbol(sym.STRING, yyline, yycolumn, yytext()); 
+        String str = yytext();
+        str = str.substring(1, str.length() -1);
+        return new Symbol(sym.STRING, yyline, yycolumn, str); 
     }
 
     "\." {
@@ -230,9 +233,9 @@ digit = [0-9]
         return new Symbol(sym.ID, yyline, yycolumn, yytext()); 
     }
 
-    [^] {
-        // System.err.println("Unrecognized character: " + yytext());
-        return new Symbol(sym.ERROR, yyline, yycolumn, yytext());
-    }
+    // [^] {
+    //     // System.err.println("Unrecognized character: " + yytext());
+    //     return new Symbol(sym.ERROR, yyline, yycolumn, yytext());
+    // }
 
 }

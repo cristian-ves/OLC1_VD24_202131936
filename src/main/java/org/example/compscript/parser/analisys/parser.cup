@@ -26,27 +26,37 @@ parser code {:
 
 :}
 
+action code {:
+:}
+
 // Terminals
-terminal String SINGLE_LINE_COMMENT, BLOCK_COMMENT, WHOLE, DOUBLE, BOOLEAN, CHAR, STRING;
-terminal String PLUS, MULTIPLICATION, MINUS, DIVISION, POWER, ROOT, MODULO, END, COLON, ERROR;
-terminal String CONST, LET, CAST, AS, IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE, CONSOLE, LOG, EQUALS;
-terminal String DOT, EQUALS_TO, NOT_EQUAL, LESS_THAN, LESS_EQUAL_THAN, GREATER_THAN, GREATER_EQUAL_THAN, OR, AND, NOT;
-terminal String PAR_START, PAR_END, BRA_START, BRA_END, INCREMENT, DECREASE, ID, UMINUS;
+terminal String SINGLE_LINE_COMMENT, BLOCK_COMMENT;
+terminal String MULTIPLICATION, DIVISION, POWER, ROOT, MODULO, COLON;
+terminal String CONST, LET, CAST, AS, IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
+terminal String NOT_EQUAL, LESS_THAN, LESS_EQUAL_THAN, GREATER_THAN, GREATER_EQUAL_THAN, OR, AND, NOT;
+terminal String BRA_START, BRA_END, INCREMENT, DECREASE, ID;
+terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR;
+terminal END, CONSOLE, DOT, LOG;
+terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, EQUALS_TO;
 
 // Non-terminals
-non terminal LinkedList<Instruction> s, INSTRUCTIONS;
-non terminal Instruction INSTRUCTION, PRINT;
-non terminal Instruction EXPRESION;
+// non terminal LinkedList<Instruction> s, INSTRUCTIONS;
+// non terminal Instruction INSTRUCTION, PRINT;
+// non terminal Instruction EXPRESSION;
+nonterminal LinkedList<Instruction> S, INSTRUCTIONS;
+nonterminal Instruction INSTRUCTION, PRINT;
+nonterminal Instruction EXPRESSION;
 
 // precedences
+precedence left EQUALS_TO;
 precedence left PLUS, MINUS;
 precedence right UMINUS;
 
 // Initial state
-start with s;
+start with S;
 
 // Productions
-s ::= INSTRUCTIONS:a {: RESULT = a; :}
+S ::= INSTRUCTIONS:a  {: RESULT = a; :}
 ;
 
 INSTRUCTIONS ::= INSTRUCTIONS:a INSTRUCTION:b {: RESULT = a; RESULT.add(b); :}
@@ -56,13 +66,17 @@ INSTRUCTIONS ::= INSTRUCTIONS:a INSTRUCTION:b {: RESULT = a; RESULT.add(b); :}
 INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
 ;
 
-PRINT ::= CONSOLE DOT LOG PAR_START EXPRESION:a PAR_END {: RESULT = new Print(a, aleft, aright); :}
+PRINT ::= CONSOLE DOT LOG PAR_START EXPRESSION:a PAR_END {: RESULT = new Print(a, aleft, aright); :}
 ;
 
-EXPRESION ::= MINUS EXPRESION:a             {: RESULT = new UnitaryNegation(a, aleft, aright); :} %prec UMINUS
-            | EXPRESION:a PLUS EXPRESION:b  {: RESULT = new Addition(a, b, aleft, aright); :}
-            | EXPRESION:a MINUS EXPRESION:b {: RESULT = new Substraction(a, b, aleft, aright); :}
-            | WHOLE:a                       {: RESULT = new Native(Integer.parseInt(a), new Type(dataType.WHOLE), aleft, aright); :}
-            | DOUBLE:a                      {: RESULT = new Native(new Double(a), new Type(dataType.DOUBLE), aleft, aright); :}
-            | PAR_START EXPRESION:a PAR_END {: RESULT = a; :}
+EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, aright); :} %prec UMINUS
+            | EXPRESSION:a PLUS EXPRESSION:b {: RESULT = new Addition(a, b, aleft, aright); :}
+            | EXPRESSION:a MINUS EXPRESSION:b {: RESULT = new Substraction(a, b, aleft, aright); :}
+            | EXPRESSION:a EQUALS_TO EXPRESSION:b {: RESULT = new EqualsTo(a, b, aleft, aright); :}
+            | WHOLE:a                  {: RESULT = new Native(Integer.parseInt(a),new Type(dataType.WHOLE), aleft, aright); :}
+            | STRING:a {: RESULT = new Native(a, new Type(dataType.STRING), aleft, aright); :}
+            | DOUBLE:a                 {: RESULT = new Native(new Double(a),new Type(dataType.DOUBLE), aleft, aright); :}
+            | BOOLEAN:a {: RESULT = new Native(Boolean.parseBoolean(a), new Type(dataType.BOOLEAN), aleft, aright); :}
+            | CHAR:a {: RESULT = new Native(a.charAt(0), new Type(dataType.CHAR), aleft, aright); :}
+            | PAR_START EXPRESSION:a PAR_END {: RESULT = a; :}
 ;

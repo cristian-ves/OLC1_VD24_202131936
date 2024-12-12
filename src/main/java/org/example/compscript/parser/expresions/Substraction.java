@@ -1,7 +1,7 @@
 package org.example.compscript.parser.expresions;
 
 import org.example.compscript.parser.abstract_.Instruction;
-import org.example.compscript.parser.exceptions.Error;
+import org.example.compscript.parser.exceptions.CompError;
 import org.example.compscript.parser.exceptions.ErrorType;
 import org.example.compscript.parser.symbol.SymbolsTable;
 import org.example.compscript.parser.symbol.Tree;
@@ -24,12 +24,12 @@ public class Substraction extends Instruction {
         String desc = "Invalid sum between types";
 
         var leftValue = this.opLeft.interpret(tree, symbolsTable);
-        if (leftValue instanceof Error) {
+        if (leftValue instanceof CompError) {
             return leftValue;
         }
 
         var rightValue = this.opRight.interpret(tree, symbolsTable);
-        if (rightValue instanceof Error) {
+        if (rightValue instanceof CompError) {
             return rightValue;
         }
 
@@ -51,7 +51,7 @@ public class Substraction extends Instruction {
                         return (int) leftValue - (double) rightValue;
                     }
                     default -> {
-                        return new Error(ErrorType.SEMANTIC, desc, this.line, this.column);
+                        return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);
                     }
                 }
             }
@@ -67,13 +67,13 @@ public class Substraction extends Instruction {
                         return (double) leftValue - (double) rightValue;
                     }
                     default -> {
-                        return new Error(ErrorType.SEMANTIC, desc, this.line, this.column);
+                        return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);
                     }
                 }
             }
 
             default -> {
-                return new Error(ErrorType.SEMANTIC, desc, this.line, this.column);
+                return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);
             }
         }
 

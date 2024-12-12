@@ -1,7 +1,7 @@
 package org.example.compscript.parser.expresions;
 
 import org.example.compscript.parser.abstract_.Instruction;
-import org.example.compscript.parser.exceptions.Error;
+import org.example.compscript.parser.exceptions.CompError;
 import org.example.compscript.parser.exceptions.ErrorType;
 import org.example.compscript.parser.symbol.*;
 
@@ -17,7 +17,7 @@ public class UnitaryNegation extends Instruction {
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
         var result = this.expression.interpret(tree, symbolsTable);
-        if (result instanceof Error) {
+        if (result instanceof CompError) {
             return result;
         }
 
@@ -31,7 +31,7 @@ public class UnitaryNegation extends Instruction {
                 return -(double) result;
             }
             default -> {
-                return new Error(ErrorType.SEMANTIC, "Invalid unitary negation", this.line, this.column);
+                return new CompError(ErrorType.SEMANTIC, "Invalid unitary negation", this.line, this.column);
             }
         }
     }
