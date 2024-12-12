@@ -36,9 +36,6 @@ public class Addition extends Instruction {
         var leftType = opLeft.type.getType();
         var rightType = opRight.type.getType();
 
-        System.out.println(leftType + " " + rightType);
-        System.out.println(leftValue + " " + rightValue);
-
         switch (leftType) {
             case WHOLE -> {
                 switch (rightType) {

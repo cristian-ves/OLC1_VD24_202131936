@@ -31,13 +31,14 @@ action code {:
 
 // Terminals
 terminal String SINGLE_LINE_COMMENT, BLOCK_COMMENT;
-terminal String MULTIPLICATION, DIVISION, POWER, ROOT, MODULO, COLON;
+terminal String COLON;
 terminal String CONST, LET, CAST, AS, IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
 terminal String NOT_EQUAL, LESS_THAN, LESS_EQUAL_THAN, GREATER_THAN, GREATER_EQUAL_THAN, OR, AND, NOT;
 terminal String BRA_START, BRA_END, INCREMENT, DECREASE, ID;
+
 terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR;
 terminal END, CONSOLE, DOT, LOG;
-terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, EQUALS_TO;
+terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, EQUALS_TO, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
 
 // Non-terminals
 // non terminal LinkedList<Instruction> s, INSTRUCTIONS;
@@ -50,6 +51,8 @@ nonterminal Instruction EXPRESSION;
 // precedences
 precedence left EQUALS_TO;
 precedence left PLUS, MINUS;
+precedence left MULTIPLICATION, DIVISION, MODULO;
+precedence nonassoc POWER, ROOT;
 precedence right UMINUS;
 
 // Initial state
@@ -72,6 +75,11 @@ PRINT ::= CONSOLE DOT LOG PAR_START EXPRESSION:a PAR_END {: RESULT = new Print(a
 EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, aright); :} %prec UMINUS
             | EXPRESSION:a PLUS EXPRESSION:b {: RESULT = new Addition(a, b, aleft, aright); :}
             | EXPRESSION:a MINUS EXPRESSION:b {: RESULT = new Substraction(a, b, aleft, aright); :}
+            | EXPRESSION:a MULTIPLICATION EXPRESSION:b {: RESULT = new Multiplication(a, b, aleft, aright); :}
+            | EXPRESSION:a DIVISION EXPRESSION:b {: RESULT = new Division(a, b, aleft, aright); :}
+            | EXPRESSION:a POWER EXPRESSION:b {: RESULT = new Power(a, b, aleft, aright); :}
+            | EXPRESSION:a ROOT EXPRESSION:b {: RESULT = new Root(a, b, aleft, aright); :}
+            | EXPRESSION:a MODULO EXPRESSION:b {: RESULT = new Modulo(a, b, aleft, aright); :}
             | EXPRESSION:a EQUALS_TO EXPRESSION:b {: RESULT = new EqualsTo(a, b, aleft, aright); :}
             | WHOLE:a                  {: RESULT = new Native(Integer.parseInt(a),new Type(dataType.WHOLE), aleft, aright); :}
             | STRING:a {: RESULT = new Native(a, new Type(dataType.STRING), aleft, aright); :}

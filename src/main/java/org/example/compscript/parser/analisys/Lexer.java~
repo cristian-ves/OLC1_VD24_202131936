@@ -1017,7 +1017,7 @@ public class Lexer implements java_cup.runtime.Scanner {
           case 84: break;
           case 35:
             { String chr = yytext();
-        char = chr.substring(1, chr.length() -1);
+        chr = chr.substring(1, chr.length() -1);
         return new Symbol(sym.CHAR, yyline, yycolumn, chr);
             }
           // fall through
