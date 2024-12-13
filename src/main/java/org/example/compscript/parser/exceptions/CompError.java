@@ -12,4 +12,14 @@ public class CompError {
         this.line = line;
         this.column = column;
     }
+
+    @Override
+    public String toString() {
+        return "CompError{" +
+                "type=" + type +
+                ", desc='" + desc + '\'' +
+                ", line=" + line +
+                ", column=" + column +
+                '}';
+    }
 }

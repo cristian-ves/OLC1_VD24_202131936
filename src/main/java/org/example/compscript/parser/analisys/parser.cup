@@ -15,6 +15,7 @@ import org.example.compscript.parser.expresions.Native;
 import org.example.compscript.parser.expresions.operators.relational.*;
 import org.example.compscript.parser.expresions.operators.arithmetic.*;
 import org.example.compscript.parser.expresions.operators.logic.*;
+import org.example.compscript.parser.exceptions.*;
 
 
 // Class name
@@ -23,9 +24,25 @@ parser code {:
     Lexer lex;
     Parser(Lexer lex){this.lex = lex;}
 
-    public void syntax_error(Symbol s){}
+    public LinkedList<CompError> sintacticErrors = new LinkedList<>();
 
-    public void unrecovered_syntax_error (Symbol s){}
+    public void syntax_error(Symbol s){
+        sintacticErrors.add(new CompError(
+            ErrorType.SINTACTICR, 
+            "Component did not expected " s.value,
+            s.left,
+            s.right
+        ));
+    }
+
+    public void unrecovered_syntax_error (Symbol s){
+        sintacticErrors.add(new CompError(
+            ErrorType.SINTACTICU, 
+            "Component did not expected " s.value,
+            s.left,
+            s.right
+        ));
+    }
 
 :}
 
@@ -33,7 +50,6 @@ action code {:
 :}
 
 // Terminals
-terminal String SINGLE_LINE_COMMENT, BLOCK_COMMENT;
 terminal String COLON;
 terminal String CONST, LET, CAST, AS, IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
 terminal String BRA_START, BRA_END, INCREMENT, DECREASE, ID;
@@ -71,6 +87,7 @@ INSTRUCTIONS ::= INSTRUCTIONS:a INSTRUCTION:b {: RESULT = a; RESULT.add(b); :}
 ;
 
 INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
+            | error END {: RESULT = null; :}
 ;
 
 PRINT ::= CONSOLE DOT LOG PAR_START EXPRESSION:a PAR_END {: RESULT = new Print(a, aleft, aright); :}

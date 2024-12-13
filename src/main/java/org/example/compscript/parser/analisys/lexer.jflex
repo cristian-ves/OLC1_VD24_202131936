@@ -2,8 +2,20 @@
 package org.example.compscript.parser.analisys;
 
 import java_cup.runtime.*;
+import java.util.LinkedList;
+import org.example.compscript.parser.exceptions.*;
 
 %%
+
+%{
+    public LinkedList<CompError> lexicalErrors = new LinkedList<>();
+%}
+
+%init{
+    yyline = 1;
+    yychar = 1;
+    lexicalErrors = new LinkedList<>();
+%init}
 
 %class Lexer
 %unicode
@@ -12,11 +24,6 @@ import java_cup.runtime.*;
 %public
 %cup
 %ignorecase
-
-%init{
-    yyline = 1;
-    yychar = 1;
-%init}
 
 // Regular definitions
 delim = [ \r\t\f\n]
@@ -90,12 +97,12 @@ digit = [0-9]
     }
 
     "//".* {
-        // System.out.println("Recognized SINGLE_LINE_COMMENT " + yytext());
-        return new Symbol(sym.SINGLE_LINE_COMMENT, yyline, yycolumn, yytext()); 
+        // // System.out.println("Recognized SINGLE_LINE_COMMENT " + yytext());
+        // return new Symbol(sym.SINGLE_LINE_COMMENT, yyline, yycolumn, yytext()); 
     }
     "/*"([^*]|(\*+[^*/]))*\*+"/" {
-        // System.out.println("Recognized BLOCK_COMMENT: " + yytext());
-        return new Symbol(sym.BLOCK_COMMENT, yyline, yycolumn, yytext());
+        // // System.out.println("Recognized BLOCK_COMMENT: " + yytext());
+        // return new Symbol(sym.BLOCK_COMMENT, yyline, yycolumn, yytext());
     }
     {digit}+ { 
         // System.out.println("Recognized WHOLE " + yytext());
@@ -233,9 +240,10 @@ digit = [0-9]
         return new Symbol(sym.ID, yyline, yycolumn, yytext()); 
     }
 
-    // [^] {
-    //     // System.err.println("Unrecognized character: " + yytext());
-    //     return new Symbol(sym.ERROR, yyline, yycolumn, yytext());
-    // }
+    [^] {
+        // System.err.println("Unrecognized character: " + yytext());
+        // return new Symbol(sym.ERROR, yyline, yycolumn, yytext());
+        lexicalErrors.add(new CompError(ErrorType.LEXICAL, "The char " + yytext() + " does not belong to the language", yyline, yycolumn));
+    }
 
 }

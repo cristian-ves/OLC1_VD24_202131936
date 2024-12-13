@@ -68,10 +68,19 @@ public class Main extends Application {
             Parser parser = new Parser(lex);
             var result = parser.parse();
 
+            for(var e: parser.sintacticErrors){
+                System.out.println(e.toString());
+            }
+
+            for (var l:lex.lexicalErrors) {
+                System.out.println(l.toString());
+            }
+
             var ast = new Tree((LinkedList<Instruction>) result.value);
             var table = new SymbolsTable();
 
             for(var a: ast.getInstructions()) {
+                if (a == null) continue;
                 var res = a.interpret(ast, table);
                 if(res instanceof Error) {
                     System.out.println(res.toString());

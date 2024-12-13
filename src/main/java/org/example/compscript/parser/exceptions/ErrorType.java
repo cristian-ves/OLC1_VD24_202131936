@@ -1,7 +1,10 @@
 package org.example.compscript.parser.exceptions;
 
 public enum ErrorType {
-    SEMANTIC("Semantico");
+    SEMANTIC("Semantic"),
+    LEXICAL("Lexical"),
+    SINTACTICR("Recovered sintactic"),
+    SINTACTICU("Unrecoverable sintactic");
 
     private final String value;
 
