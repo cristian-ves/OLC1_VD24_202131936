@@ -35,6 +35,18 @@ digit = [0-9]
 <YYINITIAL> {
 
     //Reserved words
+    "int" {
+        // System.out.println("Recognized INT_RW " + yytext());
+        return new Symbol(sym.INT_RW, yyline, yycolumn, yytext());
+    }
+    "double" {
+        // System.out.println("Recognized DOUBLE_RW " + yytext());
+        return new Symbol(sym.DOUBLE_RW, yyline, yycolumn, yytext());
+    }
+    "char" {
+        // System.out.println("Recognized CHAR_RW " + yytext());
+        return new Symbol(sym.CHAR_RW, yyline, yycolumn, yytext());
+    }
     "const" {
         // System.out.println("Recognized CONST " + yytext());
         return new Symbol(sym.CONST, yyline, yycolumn, yytext());

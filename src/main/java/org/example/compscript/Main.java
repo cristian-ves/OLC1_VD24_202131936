@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.analisys.Lexer;
 import org.example.compscript.parser.analisys.Parser;
+import org.example.compscript.parser.exceptions.CompError;
 import org.example.compscript.parser.symbol.Tree;
 import org.example.compscript.parser.symbol.SymbolsTable;
 import org.example.compscript.ui.Input;
@@ -82,7 +83,7 @@ public class Main extends Application {
             for(var a: ast.getInstructions()) {
                 if (a == null) continue;
                 var res = a.interpret(ast, table);
-                if(res instanceof Error) {
+                if(res instanceof CompError) {
                     System.out.println(res.toString());
                 }
             }

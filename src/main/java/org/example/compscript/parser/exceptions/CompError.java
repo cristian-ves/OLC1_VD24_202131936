@@ -16,7 +16,7 @@ public class CompError {
     @Override
     public String toString() {
         return "CompError{" +
-                "type=" + type +
+                "type=" + type.getValue() +
                 ", desc='" + desc + '\'' +
                 ", line=" + line +
                 ", column=" + column +
