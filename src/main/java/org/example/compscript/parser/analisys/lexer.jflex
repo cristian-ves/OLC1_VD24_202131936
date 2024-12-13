@@ -43,9 +43,17 @@ digit = [0-9]
         // System.out.println("Recognized DOUBLE_RW " + yytext());
         return new Symbol(sym.DOUBLE_RW, yyline, yycolumn, yytext());
     }
+    "bool" {
+        // System.out.println("Recognized BOOL_RW " + yytext());
+        return new Symbol(sym.BOOL_RW, yyline, yycolumn, yytext());
+    }
     "char" {
         // System.out.println("Recognized CHAR_RW " + yytext());
         return new Symbol(sym.CHAR_RW, yyline, yycolumn, yytext());
+    }
+    "string" {
+        // System.out.println("Recognized STRING_RW " + yytext());
+        return new Symbol(sym.STRING_RW, yyline, yycolumn, yytext());
     }
     "const" {
         // System.out.println("Recognized CONST " + yytext());

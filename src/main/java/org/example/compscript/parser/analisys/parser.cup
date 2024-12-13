@@ -8,6 +8,7 @@ import org.example.compscript.parser.symbol.*;
 
 // Instructions
 import org.example.compscript.parser.instructions.Print;
+import org.example.compscript.parser.instructions.Declaration;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -50,22 +51,22 @@ action code {:
 :}
 
 // Terminals
-terminal String COLON;
-terminal String CONST, LET, IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
-terminal String BRA_START, BRA_END, INCREMENT, DECREASE, ID;
+terminal String IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
+terminal String BRA_START, BRA_END, INCREMENT, DECREASE;
 
-terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR;
-terminal END, CONSOLE, DOT, LOG, CAST, AS;
-terminal INT_RW, DOUBLE_RW, CHAR_RW;
+terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR, ID;
+terminal END, COLON, CONSOLE, DOT, LOG, CAST, AS, CONST, LET;
+terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW;
 terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
 terminal EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
 terminal OR, AND, NOT;
 
 // Non-terminals
 nonterminal LinkedList<Instruction> S, INSTRUCTIONS;
-nonterminal Instruction INSTRUCTION, PRINT;
+nonterminal Instruction INSTRUCTION, PRINT, DECLARATION;
 nonterminal Instruction EXPRESSION;
 nonterminal Type TYPE_RW;
+nonterminal String MUTABILITY;
 
 // precedences
 precedence left OR;
@@ -89,15 +90,26 @@ INSTRUCTIONS ::= INSTRUCTIONS:a INSTRUCTION:b {: RESULT = a; RESULT.add(b); :}
 ;
 
 INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
+            | DECLARATION:a END {: RESULT = a; :}
             | error END {: RESULT = null; :}
 ;
 
 PRINT ::= CONSOLE DOT LOG PAR_START EXPRESSION:a PAR_END {: RESULT = new Print(a, aleft, aright); :}
 ;
 
+MUTABILITY ::= CONST {: RESULT = "false"; :}
+            | LET {: RESULT = "true"; :}
+;
+
 TYPE_RW ::= INT_RW {: RESULT = new Type(dataType.WHOLE); :}
          | DOUBLE_RW {: RESULT = new Type(dataType.DOUBLE); :}
+         | BOOL_RW {: RESULT = new Type(dataType.BOOLEAN); :}
          | CHAR_RW {: RESULT = new Type(dataType.CHAR); :}
+         | STRING_RW {: RESULT = new Type(dataType.STRING); :}
+;
+
+DECLARATION ::= MUTABILITY:a ID:b COLON TYPE_RW:c EQUALS EXPRESSION:d {: RESULT = new Declaration(a, b, c, d, aleft, aright); :}
+            | MUTABILITY:a ID:b COLON TYPE_RW:c {: RESULT = new Declaration(a, b, c, aleft, aright); :}
 ;
 
 EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, aright); :} %prec UMINUS

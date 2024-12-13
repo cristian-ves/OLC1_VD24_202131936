@@ -129,7 +129,7 @@ public class Addition extends Instruction {
                     }
                     case CHAR -> {
                         this.type.setType(dataType.STRING);
-                        return (char) leftValue + (char) rightValue;
+                        return String.valueOf(leftValue) + (char) rightValue;
                     }
                     case STRING -> {
                         this.type.setType(dataType.STRING);
