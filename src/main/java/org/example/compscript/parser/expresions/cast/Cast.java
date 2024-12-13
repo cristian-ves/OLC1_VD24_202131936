@@ -31,23 +31,23 @@ public class Cast extends Instruction {
                 return switch (expType) {
                     case WHOLE -> (double) ((int) res);
                     case CHAR -> (double) ((char) res);
-                    default -> new CompError(ErrorType.SEMANTIC, "Invalid cast type to double", line, column);
+                    default -> new CompError(ErrorType.SEMANTIC, "Invalid cast type " + expType.getValue() + " to double", line, column);
                 };
             }
             case WHOLE -> {
                 return switch (expType) {
                     case DOUBLE -> (int) ((double) res);
                     case CHAR -> (int) ((char) res);
-                    default -> new CompError(ErrorType.SEMANTIC, "Invalid cast type to int", line, column);
+                    default -> new CompError(ErrorType.SEMANTIC, "Invalid cast type " + expType.getValue() + " to int", line, column);
                 };
             }
             case CHAR -> {
                 return (expType == dataType.WHOLE)
                         ? (char) ((int) res) :
-                        new CompError(ErrorType.SEMANTIC, "Invalid cast type to char", line, column);
+                        new CompError(ErrorType.SEMANTIC, "Invalid cast type " + expType.getValue() + " to char", line, column);
             }
             default -> {
-                return new CompError(ErrorType.SEMANTIC, "Invalid cast types", line, column);
+                return new CompError(ErrorType.SEMANTIC, "Invalid cast types " + expType.getValue() + " to " + type.getType().getValue(), line, column);
             }
         }
     }

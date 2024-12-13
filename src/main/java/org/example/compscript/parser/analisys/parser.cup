@@ -17,6 +17,7 @@ import org.example.compscript.parser.expresions.operators.arithmetic.*;
 import org.example.compscript.parser.expresions.operators.logic.*;
 import org.example.compscript.parser.exceptions.*;
 import org.example.compscript.parser.expresions.cast.Cast;
+import org.example.compscript.parser.expresions.variables.Access;
 
 
 // Class name
@@ -134,6 +135,7 @@ EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, arig
             | DOUBLE:a                 {: RESULT = new Native(new Double(a),new Type(dataType.DOUBLE), aleft, aright); :}
             | BOOLEAN:a {: RESULT = new Native(Boolean.parseBoolean(a), new Type(dataType.BOOLEAN), aleft, aright); :}
             | CHAR:a {: RESULT = new Native(a.charAt(0), new Type(dataType.CHAR), aleft, aright); :}
+            | ID:a {: RESULT = new Access(a, aleft, aright); :}
             | CAST PAR_START EXPRESSION:a AS TYPE_RW:b PAR_END {: RESULT = new Cast(a, b, aleft, aright); :}
             | PAR_START EXPRESSION:a PAR_END {: RESULT = a; :}
 ;

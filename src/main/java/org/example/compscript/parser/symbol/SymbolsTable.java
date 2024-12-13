@@ -33,10 +33,19 @@ public class SymbolsTable {
 
         if (searchedSymbol == null) {
             this.currentTable.put(symbol.getId().toLowerCase(), symbol);
-            System.out.println(symbol.toString());
              return true;
         }
 
         return false;
+    }
+
+    public Symbol_ getVariable (String id) {
+        Symbol_ searchedSymbol = (Symbol_) this.currentTable.get(id.toLowerCase());
+
+        if(searchedSymbol != null) {
+            return searchedSymbol;
+        }
+
+        return null;
     }
 }
