@@ -88,7 +88,6 @@ public class Main extends Application {
                 }
             }
 
-            System.out.println(ast.getConsole());
             console.showOutput(ast.getConsole());
 
         } catch (Exception e) {

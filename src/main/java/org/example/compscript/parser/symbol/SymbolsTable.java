@@ -48,4 +48,23 @@ public class SymbolsTable {
 
         return null;
     }
+
+    public int putVariable (String id, Symbol_ symbol) {
+        Symbol_ searchedSymbol = (Symbol_) this.currentTable.get(id.toLowerCase());
+
+        if(searchedSymbol == null) return 0; // variable not declared
+
+        if(!searchedSymbol.isMutable()) return 1; // variable not mutable 'const'
+
+        symbol.setMutable(true);
+
+        if(searchedSymbol.getType().getType() == symbol.getType().getType()) {
+            this.currentTable.put(id.toLowerCase(), symbol);
+            return 2; // success
+        }
+
+        return 3; // types not matching
+
+    }
+
 }
