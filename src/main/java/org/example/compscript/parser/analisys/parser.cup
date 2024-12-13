@@ -9,6 +9,7 @@ import org.example.compscript.parser.symbol.*;
 // Instructions
 import org.example.compscript.parser.instructions.Print;
 import org.example.compscript.parser.instructions.Declaration;
+import org.example.compscript.parser.instructions.Assignment;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -64,7 +65,7 @@ terminal OR, AND, NOT;
 
 // Non-terminals
 nonterminal LinkedList<Instruction> S, INSTRUCTIONS;
-nonterminal Instruction INSTRUCTION, PRINT, DECLARATION;
+nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT;
 nonterminal Instruction EXPRESSION;
 nonterminal Type TYPE_RW;
 nonterminal String MUTABILITY;
@@ -92,6 +93,7 @@ INSTRUCTIONS ::= INSTRUCTIONS:a INSTRUCTION:b {: RESULT = a; RESULT.add(b); :}
 
 INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
             | DECLARATION:a END {: RESULT = a; :}
+            | ASSIGNMENT:a END {: RESULT = a; :}
             | error END {: RESULT = null; :}
 ;
 
@@ -111,6 +113,9 @@ TYPE_RW ::= INT_RW {: RESULT = new Type(dataType.WHOLE); :}
 
 DECLARATION ::= MUTABILITY:a ID:b COLON TYPE_RW:c EQUALS EXPRESSION:d {: RESULT = new Declaration(a, b, c, d, aleft, aright); :}
             | MUTABILITY:a ID:b COLON TYPE_RW:c {: RESULT = new Declaration(a, b, c, aleft, aright); :}
+;
+
+ASSIGNMENT ::= ID:a EQUALS EXPRESSION:b {: RESULT = new Assignment(a, b, aleft, aright); :}
 ;
 
 EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, aright); :} %prec UMINUS
