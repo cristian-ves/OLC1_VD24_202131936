@@ -203,7 +203,7 @@ digit = [0-9]
         // System.out.println("Recognized PAR_END " + yytext());
         return new Symbol(sym.PAR_END, yyline, yycolumn, yytext());
     }
-    " {" {
+    "{" {
         // System.out.println("Recognized BRA_START " + yytext());
         return new Symbol(sym.BRA_START, yyline, yycolumn, yytext());
     }

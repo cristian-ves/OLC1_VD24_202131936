@@ -11,6 +11,7 @@ import org.example.compscript.parser.instructions.Print;
 import org.example.compscript.parser.instructions.Declaration;
 import org.example.compscript.parser.instructions.Assignment;
 import org.example.compscript.parser.instructions.IncrementDecrement;
+import org.example.compscript.parser.instructions.If;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -54,11 +55,9 @@ action code {:
 :}
 
 // Terminals
-terminal String IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
-terminal String BRA_START, BRA_END;
-
 terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR, ID;
-terminal END, COLON, CONSOLE, DOT, LOG, CAST, AS, CONST, LET;
+terminal IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
+terminal END, COLON, CONSOLE, DOT, LOG, CAST, AS, CONST, LET, BRA_START, BRA_END;
 terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW;
 terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
 terminal EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
@@ -66,7 +65,7 @@ terminal OR, AND, NOT;
 
 // Non-terminals
 nonterminal LinkedList<Instruction> S, INSTRUCTIONS;
-nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT;
+nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT, IF_SENTENCE;
 nonterminal Instruction EXPRESSION;
 nonterminal Type TYPE_RW;
 nonterminal String MUTABILITY, COUNTER;
@@ -96,6 +95,7 @@ INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
             | DECLARATION:a END {: RESULT = a; :}
             | ASSIGNMENT:a END {: RESULT = a; :}
             | INCREMENT_DECREMENT:a END {: RESULT = a; :}
+            | IF_SENTENCE:a {: RESULT = a; :}
             | error END {: RESULT = null; :}
 ;
 
@@ -125,6 +125,12 @@ COUNTER ::= PLUS PLUS {: RESULT = "plus"; :}
 ;
 
 INCREMENT_DECREMENT ::= ID:a COUNTER:b {: RESULT = new IncrementDecrement(a, b, aleft, aright); :}
+;
+
+// public If(Instruction condition, LinkedList<Instruction> instructions, Instruction elseCondition, LinkedList<Instruction> elseInstructions, int line, int column) {
+IF_SENTENCE ::= IF PAR_START EXPRESSION:a PAR_END BRA_START INSTRUCTIONS:b BRA_END {: RESULT = new If(a, b, aleft, aright); :}
+            | IF PAR_START EXPRESSION:a PAR_END BRA_START INSTRUCTIONS:b BRA_END ELSE BRA_START INSTRUCTIONS:c BRA_END {: RESULT = new If(a, b, c, aleft, aright); :}
+            | IF PAR_START EXPRESSION:a PAR_END BRA_START INSTRUCTIONS:b BRA_END ELSE IF PAR_START EXPRESSION:c PAR_END BRA_START INSTRUCTIONS:d BRA_END {: RESULT = new If(a, b, c, d, aleft, aright); :}
 ;
 
 EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, aright); :} %prec UMINUS

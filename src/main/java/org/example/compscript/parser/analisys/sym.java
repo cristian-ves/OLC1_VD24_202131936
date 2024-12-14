@@ -8,62 +8,68 @@ package org.example.compscript.parser.analisys;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int CAST = 24;
-  public static final int WHOLE = 13;
+  public static final int CAST = 22;
+  public static final int WHOLE = 2;
   public static final int GREATER_EQUAL_THAN = 49;
   public static final int POWER = 41;
-  public static final int CONST = 26;
-  public static final int CHAR = 17;
+  public static final int CONST = 24;
+  public static final int CHAR = 6;
   public static final int EQUALS = 38;
   public static final int UMINUS = 37;
   public static final int PAR_END = 34;
   public static final int INT_RW = 28;
   public static final int NOT_EQUAL = 45;
   public static final int LESS_EQUAL_THAN = 48;
-  public static final int DOUBLE = 15;
-  public static final int CONTINUE = 10;
+  public static final int DOUBLE = 4;
+  public static final int CONTINUE = 16;
   public static final int MINUS = 36;
-  public static final int FOR = 7;
+  public static final int FOR = 13;
   public static final int GREATER_THAN = 47;
-  public static final int MATCH = 4;
+  public static final int MATCH = 10;
   public static final int DOUBLE_RW = 29;
   public static final int NOT = 52;
   public static final int AND = 51;
-  public static final int BRA_START = 11;
+  public static final int BRA_START = 26;
   public static final int OR = 50;
   public static final int PLUS = 35;
-  public static final int IF = 2;
-  public static final int DOT = 22;
-  public static final int ID = 18;
+  public static final int IF = 8;
+  public static final int DOT = 20;
+  public static final int ID = 7;
   public static final int EOF = 0;
-  public static final int BOOLEAN = 16;
+  public static final int BOOLEAN = 5;
   public static final int EQUALS_TO = 44;
   public static final int CHAR_RW = 30;
   public static final int error = 1;
-  public static final int BRA_END = 12;
+  public static final int BRA_END = 27;
   public static final int MODULO = 43;
-  public static final int BREAK = 9;
-  public static final int LOG = 23;
-  public static final int COLON = 20;
-  public static final int ELSE = 3;
-  public static final int WHILE = 6;
-  public static final int DEFAULT = 5;
-  public static final int LET = 27;
+  public static final int BREAK = 15;
+  public static final int LOG = 21;
+  public static final int COLON = 18;
+  public static final int ELSE = 9;
+  public static final int WHILE = 12;
+  public static final int DEFAULT = 11;
+  public static final int LET = 25;
   public static final int BOOL_RW = 31;
-  public static final int END = 19;
+  public static final int END = 17;
   public static final int ROOT = 42;
-  public static final int STRING = 14;
-  public static final int AS = 25;
+  public static final int STRING = 3;
+  public static final int AS = 23;
   public static final int DIVISION = 40;
   public static final int LESS_THAN = 46;
   public static final int STRING_RW = 32;
   public static final int MULTIPLICATION = 39;
-  public static final int DO = 8;
-  public static final int CONSOLE = 21;
+  public static final int DO = 14;
+  public static final int CONSOLE = 19;
   public static final int PAR_START = 33;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
+  "WHOLE",
+  "STRING",
+  "DOUBLE",
+  "BOOLEAN",
+  "CHAR",
+  "ID",
   "IF",
   "ELSE",
   "MATCH",
@@ -73,14 +79,6 @@ public class sym {
   "DO",
   "BREAK",
   "CONTINUE",
-  "BRA_START",
-  "BRA_END",
-  "WHOLE",
-  "STRING",
-  "DOUBLE",
-  "BOOLEAN",
-  "CHAR",
-  "ID",
   "END",
   "COLON",
   "CONSOLE",
@@ -90,6 +88,8 @@ public class sym {
   "AS",
   "CONST",
   "LET",
+  "BRA_START",
+  "BRA_END",
   "INT_RW",
   "DOUBLE_RW",
   "CHAR_RW",

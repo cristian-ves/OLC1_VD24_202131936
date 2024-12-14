@@ -6,10 +6,18 @@ public class SymbolsTable {
 
     private HashMap<String, Symbol_> currentTable;
     private String name;
+    private SymbolsTable prevTable;
 
     public SymbolsTable() {
         this.currentTable = new HashMap<>();
         this.name = "";
+    }
+
+    public SymbolsTable(SymbolsTable prevTable) {
+        this.prevTable = prevTable;
+        this.currentTable = new HashMap<>();
+        this.name = "";
+
     }
 
     public HashMap<String, Symbol_> getCurrentTable() {
@@ -18,6 +26,10 @@ public class SymbolsTable {
 
     public String getName() {
         return name;
+    }
+
+    public SymbolsTable getPrevTable() {
+        return prevTable;
     }
 
     public void setCurrentTable(HashMap<String, Symbol_> currentTable) {
@@ -40,17 +52,20 @@ public class SymbolsTable {
     }
 
     public Symbol_ getVariable (String id) {
-        Symbol_ searchedSymbol = (Symbol_) this.currentTable.get(id.toLowerCase());
 
-        if(searchedSymbol != null) {
-            return searchedSymbol;
+        for(SymbolsTable i = this; i != null; i = i.getPrevTable()){
+
+            Symbol_ searchedSymbol = (Symbol_) i.currentTable.get(id.toLowerCase());
+            if(searchedSymbol != null)
+                return searchedSymbol;
         }
 
         return null;
+
     }
 
     public int putVariable (String id, Symbol_ symbol) {
-        Symbol_ searchedSymbol = (Symbol_) this.currentTable.get(id.toLowerCase());
+        Symbol_ searchedSymbol = getVariable(id);
 
         if(searchedSymbol == null) return 0; // variable not declared
 
