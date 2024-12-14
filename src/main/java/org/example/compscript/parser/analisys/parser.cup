@@ -12,6 +12,9 @@ import org.example.compscript.parser.instructions.Declaration;
 import org.example.compscript.parser.instructions.Assignment;
 import org.example.compscript.parser.instructions.IncrementDecrement;
 import org.example.compscript.parser.instructions.If;
+import org.example.compscript.parser.instructions.match.Match;
+import org.example.compscript.parser.instructions.match.Case;
+import org.example.compscript.parser.instructions.match.Default;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -64,8 +67,8 @@ terminal EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER
 terminal OR, AND, NOT;
 
 // Non-terminals
-nonterminal LinkedList<Instruction> S, INSTRUCTIONS;
-nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT, IF_SENTENCE;
+nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES;
+nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT, IF_SENTENCE, MATCH_SENTENCE, CASE;
 nonterminal Instruction EXPRESSION;
 nonterminal Type TYPE_RW;
 nonterminal String MUTABILITY, COUNTER;
@@ -96,6 +99,7 @@ INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
             | ASSIGNMENT:a END {: RESULT = a; :}
             | INCREMENT_DECREMENT:a END {: RESULT = a; :}
             | IF_SENTENCE:a {: RESULT = a; :}
+            | MATCH_SENTENCE:a {: RESULT = a; :}
             | error END {: RESULT = null; :}
 ;
 
@@ -127,10 +131,20 @@ COUNTER ::= PLUS PLUS {: RESULT = "plus"; :}
 INCREMENT_DECREMENT ::= ID:a COUNTER:b {: RESULT = new IncrementDecrement(a, b, aleft, aright); :}
 ;
 
-// public If(Instruction condition, LinkedList<Instruction> instructions, Instruction elseCondition, LinkedList<Instruction> elseInstructions, int line, int column) {
 IF_SENTENCE ::= IF PAR_START EXPRESSION:a PAR_END BRA_START INSTRUCTIONS:b BRA_END {: RESULT = new If(a, b, aleft, aright); :}
             | IF PAR_START EXPRESSION:a PAR_END BRA_START INSTRUCTIONS:b BRA_END ELSE BRA_START INSTRUCTIONS:c BRA_END {: RESULT = new If(a, b, c, aleft, aright); :}
             | IF PAR_START EXPRESSION:a PAR_END BRA_START INSTRUCTIONS:b BRA_END ELSE IF PAR_START EXPRESSION:c PAR_END BRA_START INSTRUCTIONS:d BRA_END {: RESULT = new If(a, b, c, d, aleft, aright); :}
+;
+
+CASE ::= EXPRESSION:a EQUALS GREATER_THAN BRA_START INSTRUCTIONS:b BRA_END {: RESULT = new Case(a, b, aleft, aright); :}
+        | DEFAULT EQUALS GREATER_THAN BRA_START INSTRUCTIONS:a BRA_END {: RESULT = new Default(a, aleft, aright); :}
+;
+
+CASES ::= CASES:a CASE:b {: RESULT = a; RESULT.add(b); :}
+        | CASE:a {: RESULT = new LinkedList<Instruction>(); RESULT.add(a); :}
+;
+
+MATCH_SENTENCE ::= MATCH EXPRESSION:a BRA_START CASES:b BRA_END {: RESULT = new Match(a, b, aleft, aright); :}
 ;
 
 EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, aright); :} %prec UMINUS
