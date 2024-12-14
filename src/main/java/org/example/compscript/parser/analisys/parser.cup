@@ -10,6 +10,7 @@ import org.example.compscript.parser.symbol.*;
 import org.example.compscript.parser.instructions.Print;
 import org.example.compscript.parser.instructions.Declaration;
 import org.example.compscript.parser.instructions.Assignment;
+import org.example.compscript.parser.instructions.IncrementDecrement;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -54,7 +55,7 @@ action code {:
 
 // Terminals
 terminal String IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
-terminal String BRA_START, BRA_END, INCREMENT, DECREASE;
+terminal String BRA_START, BRA_END;
 
 terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR, ID;
 terminal END, COLON, CONSOLE, DOT, LOG, CAST, AS, CONST, LET;
@@ -65,10 +66,10 @@ terminal OR, AND, NOT;
 
 // Non-terminals
 nonterminal LinkedList<Instruction> S, INSTRUCTIONS;
-nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT;
+nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT;
 nonterminal Instruction EXPRESSION;
 nonterminal Type TYPE_RW;
-nonterminal String MUTABILITY;
+nonterminal String MUTABILITY, COUNTER;
 
 // precedences
 precedence left OR;
@@ -94,6 +95,7 @@ INSTRUCTIONS ::= INSTRUCTIONS:a INSTRUCTION:b {: RESULT = a; RESULT.add(b); :}
 INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
             | DECLARATION:a END {: RESULT = a; :}
             | ASSIGNMENT:a END {: RESULT = a; :}
+            | INCREMENT_DECREMENT:a END {: RESULT = a; :}
             | error END {: RESULT = null; :}
 ;
 
@@ -116,6 +118,13 @@ DECLARATION ::= MUTABILITY:a ID:b COLON TYPE_RW:c EQUALS EXPRESSION:d {: RESULT 
 ;
 
 ASSIGNMENT ::= ID:a EQUALS EXPRESSION:b {: RESULT = new Assignment(a, b, aleft, aright); :}
+;
+
+COUNTER ::= PLUS PLUS {: RESULT = "plus"; :}
+        | MINUS MINUS {: RESULT = "minus"; :}
+;
+
+INCREMENT_DECREMENT ::= ID:a COUNTER:b {: RESULT = new IncrementDecrement(a, b, aleft, aright); :}
 ;
 
 EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, aright); :} %prec UMINUS

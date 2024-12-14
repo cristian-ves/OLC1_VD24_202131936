@@ -212,15 +212,6 @@ digit = [0-9]
         return new Symbol(sym.BRA_END, yyline, yycolumn, yytext());
     }
 
-    "++" {
-        // System.out.println("Recognized INCREMENT " + yytext());
-        return new Symbol(sym.INCREMENT, yyline, yycolumn, yytext());
-    }
-    "--" {
-        // System.out.println("Recognized DECREASE " + yytext());
-        return new Symbol(sym.DECREASE, yyline, yycolumn, yytext());
-    }
-
     // Arithmetic operators
     "+" {  
         // System.out.println("Recognized PLUS " + yytext());
