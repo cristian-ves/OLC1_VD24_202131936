@@ -22,7 +22,7 @@ public class LessThan extends Instruction {
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
 
-        String desc = "Invalid relational combination ==";
+        String desc = "Invalid relational combination <";
 
         var res1 = this.leftExp.interpret(tree, symbolsTable);
         if(res1 instanceof Error) {

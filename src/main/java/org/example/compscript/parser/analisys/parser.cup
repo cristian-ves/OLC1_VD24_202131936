@@ -15,6 +15,10 @@ import org.example.compscript.parser.instructions.If;
 import org.example.compscript.parser.instructions.match.Match;
 import org.example.compscript.parser.instructions.match.Case;
 import org.example.compscript.parser.instructions.match.Default;
+import org.example.compscript.parser.instructions.loop.For;
+import org.example.compscript.parser.instructions.loop.While;
+import org.example.compscript.parser.instructions.loop.DoWhile;
+import org.example.compscript.parser.instructions.loop.Break;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -69,6 +73,7 @@ terminal OR, AND, NOT;
 // Non-terminals
 nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES;
 nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT, IF_SENTENCE, MATCH_SENTENCE, CASE;
+nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS;
 nonterminal Instruction EXPRESSION;
 nonterminal Type TYPE_RW;
 nonterminal String MUTABILITY, COUNTER;
@@ -100,6 +105,10 @@ INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
             | INCREMENT_DECREMENT:a END {: RESULT = a; :}
             | IF_SENTENCE:a {: RESULT = a; :}
             | MATCH_SENTENCE:a {: RESULT = a; :}
+            | LOOP_FOR:a {: RESULT = a; :}
+            | LOOP_WHILE:a {: RESULT = a; :}
+            | LOOP_DO:a END {: RESULT = a; :}
+            | BREAKS:a END {: RESULT = a; :}
             | error END {: RESULT = null; :}
 ;
 
@@ -145,6 +154,22 @@ CASES ::= CASES:a CASE:b {: RESULT = a; RESULT.add(b); :}
 ;
 
 MATCH_SENTENCE ::= MATCH EXPRESSION:a BRA_START CASES:b BRA_END {: RESULT = new Match(a, b, aleft, aright); :}
+;
+
+LOOP_FOR ::= FOR PAR_START ASSIGNMENT:a END EXPRESSION:b END STEP_FOR:c PAR_END BRA_START INSTRUCTIONS:d BRA_END {: RESULT = new For(a, b, c, d, aleft, aright); :}
+;
+
+STEP_FOR ::= ASSIGNMENT:a {: RESULT = a; :}
+        | INCREMENT_DECREMENT:a {: RESULT = a; :}
+;
+
+LOOP_WHILE ::= WHILE PAR_START EXPRESSION:a PAR_END BRA_START INSTRUCTIONS:b BRA_END {: RESULT = new While(a, b, aleft, aright); :}
+;
+
+LOOP_DO ::= DO BRA_START INSTRUCTIONS:a BRA_END WHILE PAR_START EXPRESSION:b PAR_END {: RESULT = new DoWhile(a, b, aleft, aright); :}
+;
+
+BREAKS ::= BREAK:a {: RESULT = new Break(aleft, aright); :}
 ;
 
 EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, aright); :} %prec UMINUS

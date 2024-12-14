@@ -38,12 +38,10 @@ public class IncrementDecrement extends Instruction {
 
                 if(symbolType == dataType.DOUBLE) {
                     double newValue = ((double) symbol.getValue()) + (isPlus ? 1 : -1);
-                    symbolsTable.putVariable(id, new Symbol_(symbol.getType(), id, newValue, true));
-                    return null;
                 }
 
                 int newValue = ((int) symbol.getValue()) + (isPlus ? 1 : -1);
-                symbolsTable.putVariable(id, new Symbol_(symbol.getType(), id, newValue, true));
+                symbol.setValue(newValue);
                 return null;
 
             }
