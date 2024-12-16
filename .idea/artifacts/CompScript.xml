@@ -1,0 +1,22 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="CompScript">
+    <output-path>$PROJECT_DIR$/out/artifacts/CompScript</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="org.example.compscript.Main" />
+        <option name="description" value="" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="title" value="" />
+        <option name="vendor" value="" />
+        <option name="version" value="" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="CompScript.jar">
+        <element id="module-output" name="CompScript" />
+      </element>
+      <element id="library" level="project" name="java-cup-11b-runtime" />
+      <element id="library" level="application" name="javafx-sdk-23.0" />
+    </root>
+  </artifact>
+</component>
