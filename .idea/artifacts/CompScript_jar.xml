@@ -1,28 +1,22 @@
 <component name="ArtifactManager">
-  <artifact name="CompScript:jar">
+  <artifact type="jar" name="CompScript:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/CompScript_jar</output-path>
-    <root id="root">
-      <element id="archive" name="CompScript.jar">
-        <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/../../../../META-INF/MANIFEST.MF" />
-        </element>
-        <element id="module-output" name="CompScript" />
-      </element>
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:23.0.1" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:linux:23.0.1" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:linux:23.0.1" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:23.0.1" />
-      <element id="library" level="project" name="Maven: org.fxmisc.flowless:flowless:0.7.3" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:23.0.1" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:linux:23.0.1" />
-      <element id="library" level="project" name="Maven: org.fxmisc.richtext:richtextfx:0.11.4" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:23.0.1" />
-      <element id="library" level="project" name="Maven: org.fxmisc.wellbehaved:wellbehavedfx:0.3.3" />
-      <element id="library" level="project" name="Maven: org.fxmisc.undo:undofx:2.1.1" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:linux:23.0.1" />
-      <element id="library" level="project" name="Maven: com.github.vbmacher:java-cup-runtime:11b-20160615-3" />
-      <element id="library" level="project" name="Maven: org.reactfx:reactfx:2.0-M5" />
-      <element id="library" level="project" name="java-cup-11b-runtime" />
+    <root id="archive" name="CompScript.jar">
+      <element id="module-output" name="CompScript" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/23.0.1/javafx-base-23.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/23.0.1/javafx-graphics-23.0.1-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/23.0.1/javafx-fxml-23.0.1-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/23.0.1/javafx-controls-23.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/23.0.1/javafx-controls-23.0.1-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/fxmisc/flowless/flowless/0.7.3/flowless-0.7.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/23.0.1/javafx-graphics-23.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/23.0.1/javafx-fxml-23.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/fxmisc/undo/undofx/2.1.1/undofx-2.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/vbmacher/java-cup-runtime/11b-20160615-3/java-cup-runtime-11b-20160615-3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/fxmisc/wellbehaved/wellbehavedfx/0.3.3/wellbehavedfx-0.3.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/fxmisc/richtext/richtextfx/0.11.4/richtextfx-0.11.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/reactfx/reactfx/2.0-M5/reactfx-2.0-M5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/23.0.1/javafx-base-23.0.1-linux.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

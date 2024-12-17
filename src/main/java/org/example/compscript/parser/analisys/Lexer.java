@@ -980,6 +980,11 @@ public class Lexer implements java_cup.runtime.Scanner {
             { // System.out.println("Recognized STRING " + yytext());
         String str = yytext();
         str = str.substring(1, str.length() -1);
+        str = str.replace("\\n", "\n")
+             .replace("\\t", "\t")
+             .replace("\\\"", "\"")
+             .replace("\\\\", "\\")
+             .replace("\\'", "\'");
         return new Symbol(sym.STRING, yyline, yycolumn, str);
             }
           // fall through
@@ -1040,8 +1045,15 @@ public class Lexer implements java_cup.runtime.Scanner {
           case 87: break;
           case 34:
             { String chr = yytext();
-        chr = chr.substring(1, chr.length() -1);
-        return new Symbol(sym.CHAR, yyline, yycolumn, chr);
+    chr = chr.substring(1, chr.length() - 1);
+    switch (chr) {
+        case "\\n": chr = "\n"; break;
+        case "\\t": chr = "\t"; break;
+        case "\\\"": chr = "\""; break;
+        case "\\\\": chr = "\\"; break;
+        case "\\'": chr = "'"; break;
+    }
+    return new Symbol(sym.CHAR, yyline, yycolumn, chr);
             }
           // fall through
           case 88: break;

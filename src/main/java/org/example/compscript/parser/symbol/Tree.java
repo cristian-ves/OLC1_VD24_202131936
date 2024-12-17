@@ -37,4 +37,8 @@ public class Tree {
     public void addError(CompError error) {
         this.errors.add(error);
     }
+
+    public LinkedList<CompError> getErrors() {
+        return errors;
+    }
 }

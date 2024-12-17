@@ -69,26 +69,34 @@ public class Main extends Application {
             Parser parser = new Parser(lex);
             var result = parser.parse();
 
+            String sintacticErrorsConsole = "";
             for(var e: parser.sintacticErrors){
-                System.out.println(e.toString());
+                sintacticErrorsConsole += e.toString() + "\n";
             }
 
+            String lexicalErrosConsole = "";
             for (var l:lex.lexicalErrors) {
-                System.out.println(l.toString());
+                lexicalErrosConsole += l.toString() + "\n";
             }
 
             var ast = new Tree((LinkedList<Instruction>) result.value);
             var table = new SymbolsTable();
 
+            String semanticErrosConsole = "";
+
             for(var a: ast.getInstructions()) {
                 if (a == null) continue;
                 var res = a.interpret(ast, table);
                 if(res instanceof CompError) {
-                    System.out.println(res.toString());
+                    semanticErrosConsole += res.toString() + "\n";
                 }
             }
 
-            console.showOutput(ast.getConsole());
+            for (var e: ast.getErrors()) {
+                semanticErrosConsole += e.toString() + "\n";
+            }
+
+            console.showOutput(ast.getConsole() + lexicalErrosConsole + sintacticErrorsConsole + semanticErrosConsole);
 
         } catch (Exception e) {
             System.out.println(e);

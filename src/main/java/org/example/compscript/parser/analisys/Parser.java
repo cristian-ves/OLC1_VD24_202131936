@@ -524,7 +524,7 @@ public class Parser extends java_cup.runtime.lr_parser {
     public void syntax_error(Symbol s){
         sintacticErrors.add(new CompError(
             ErrorType.SINTACTICR, 
-            "Component did not expected " + s.value,
+            "Component did not expect " + s.value,
             s.left,
             s.right
         ));
@@ -533,7 +533,7 @@ public class Parser extends java_cup.runtime.lr_parser {
     public void unrecovered_syntax_error (Symbol s){
         sintacticErrors.add(new CompError(
             ErrorType.SINTACTICU, 
-            "Component did not expected " + s.value,
+            "Component did not expect " + s.value,
             s.left,
             s.right
         ));

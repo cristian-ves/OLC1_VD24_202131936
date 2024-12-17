@@ -137,14 +137,26 @@ digit = [0-9]
         return new Symbol(sym.BOOLEAN, yyline, yycolumn, yytext()); 
     }
     "'"([^'\\]|\\[nt\"\\\\'])"'" { 
-        String chr = yytext();
-        chr = chr.substring(1, chr.length() -1);
-        return new Symbol(sym.CHAR, yyline, yycolumn, chr); 
+    String chr = yytext();
+    chr = chr.substring(1, chr.length() - 1);
+    switch (chr) {
+        case "\\n": chr = "\n"; break;
+        case "\\t": chr = "\t"; break;
+        case "\\\"": chr = "\""; break;
+        case "\\\\": chr = "\\"; break;
+        case "\\'": chr = "'"; break;
     }
+    return new Symbol(sym.CHAR, yyline, yycolumn, chr);
+}
     "\""([^\"\\]|\\[nt\"\\\\'])*"\"" { 
         // System.out.println("Recognized STRING " + yytext());
         String str = yytext();
         str = str.substring(1, str.length() -1);
+        str = str.replace("\\n", "\n")
+             .replace("\\t", "\t")
+             .replace("\\\"", "\"")
+             .replace("\\\\", "\\")
+             .replace("\\'", "\'");
         return new Symbol(sym.STRING, yyline, yycolumn, str); 
     }
 

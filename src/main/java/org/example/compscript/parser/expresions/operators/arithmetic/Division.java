@@ -45,7 +45,7 @@ public class Division extends Instruction {
                     }
                     case DOUBLE -> {
                         this.type.setType(dataType.DOUBLE);
-                        return (int) leftValue / (double) rightValue;
+                        return (double) leftValue / (double) rightValue;
                     }
                     case CHAR -> {
                         this.type.setType(dataType.DOUBLE);
