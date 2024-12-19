@@ -11,6 +11,7 @@ import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.analisys.Lexer;
 import org.example.compscript.parser.analisys.Parser;
 import org.example.compscript.parser.exceptions.CompError;
+import org.example.compscript.parser.symbol.STableType;
 import org.example.compscript.parser.symbol.Tree;
 import org.example.compscript.parser.symbol.SymbolsTable;
 import org.example.compscript.ui.Input;
@@ -80,7 +81,7 @@ public class Main extends Application {
             }
 
             var ast = new Tree((LinkedList<Instruction>) result.value);
-            var table = new SymbolsTable();
+            var table = new SymbolsTable(STableType.MAIN);
 
             String semanticErrosConsole = "";
 

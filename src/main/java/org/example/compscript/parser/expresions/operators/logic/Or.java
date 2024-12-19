@@ -34,14 +34,8 @@ public class Or extends Instruction {
             return res2;
         }
 
-        System.out.println(res2);
-        System.out.println(res2.getClass());
-        System.out.println(res1);
-        System.out.println(res1.getClass());
-
         var type1 = this.leftExp.type.getType();
         var type2 = this.rightExp.type.getType();
-        System.out.println(type1 +" " +type2);
 
         if (type1==dataType.BOOLEAN && type2==dataType.BOOLEAN) return (boolean) res1 || (boolean) res2;
         return new CompError(ErrorType.SEMANTIC, desc, this.line, this.column);

@@ -3,14 +3,13 @@ package org.example.compscript.parser.instructions;
 import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.exceptions.CompError;
 import org.example.compscript.parser.exceptions.ErrorType;
-import org.example.compscript.parser.symbol.SymbolsTable;
-import org.example.compscript.parser.symbol.Tree;
-import org.example.compscript.parser.symbol.Type;
-import org.example.compscript.parser.symbol.dataType;
+import org.example.compscript.parser.symbol.*;
 
 import java.util.LinkedList;
 
 public class If extends Instruction {
+
+    //TODO: IFS ANIDADOS
 
     private Instruction condition;
     private LinkedList<Instruction> instructions;
@@ -31,14 +30,6 @@ public class If extends Instruction {
             this.elseInstructions = elseInstructions;
     }
 
-    public If(Instruction condition, LinkedList<Instruction> instructions, Instruction elseCondition, LinkedList<Instruction> elseInstructions, int line, int column) {
-        super(new Type(dataType.VOID), line, column);
-        this.condition = condition;
-        this.instructions = instructions;
-        this.elseCondition = elseCondition;
-        this.elseInstructions = elseInstructions;
-    }
-
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
         var cond = this.condition.interpret(tree, symbolsTable);
@@ -53,7 +44,7 @@ public class If extends Instruction {
             );
 
         // creating new environment
-        var newTable = new SymbolsTable(symbolsTable);
+        var newTable = new SymbolsTable(symbolsTable, STableType.IF);
         if((boolean) cond){
             for (var i: this.instructions) {
                 var res = i.interpret(tree, newTable);

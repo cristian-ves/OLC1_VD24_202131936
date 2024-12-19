@@ -19,6 +19,7 @@ import org.example.compscript.parser.instructions.loop.For;
 import org.example.compscript.parser.instructions.loop.While;
 import org.example.compscript.parser.instructions.loop.DoWhile;
 import org.example.compscript.parser.instructions.loop.Break;
+import org.example.compscript.parser.instructions.loop.Continue;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -73,7 +74,7 @@ terminal OR, AND, NOT;
 // Non-terminals
 nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES;
 nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT, IF_SENTENCE, MATCH_SENTENCE, CASE;
-nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS;
+nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS, CONTINUES;
 nonterminal Instruction EXPRESSION;
 nonterminal Type TYPE_RW;
 nonterminal String MUTABILITY, COUNTER;
@@ -97,6 +98,7 @@ S ::= INSTRUCTIONS:a  {: RESULT = a; :}
 
 INSTRUCTIONS ::= INSTRUCTIONS:a INSTRUCTION:b {: RESULT = a; RESULT.add(b); :}
                | INSTRUCTION:a                {: RESULT = new LinkedList<Instruction>(); RESULT.add(a); :}
+
 ;
 
 INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
@@ -109,6 +111,7 @@ INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
             | LOOP_WHILE:a {: RESULT = a; :}
             | LOOP_DO:a END {: RESULT = a; :}
             | BREAKS:a END {: RESULT = a; :}
+            | CONTINUES:a END {: RESULT = a; :}
             | error END {: RESULT = null; :}
 ;
 
@@ -140,9 +143,9 @@ COUNTER ::= PLUS PLUS {: RESULT = "plus"; :}
 INCREMENT_DECREMENT ::= ID:a COUNTER:b {: RESULT = new IncrementDecrement(a, b, aleft, aright); :}
 ;
 
-IF_SENTENCE ::= IF PAR_START EXPRESSION:a PAR_END BRA_START INSTRUCTIONS:b BRA_END {: RESULT = new If(a, b, aleft, aright); :}
+IF_SENTENCE ::= IF PAR_START EXPRESSION:a PAR_END BRA_START INSTRUCTIONS:b BRA_END {: RESULT = new If(a, b, null, aleft, aright); :}
+            | IF PAR_START EXPRESSION:a PAR_END BRA_START INSTRUCTIONS:b BRA_END ELSE IF_SENTENCE {: RESULT = new If(a, b, null, aleft, aright); :}
             | IF PAR_START EXPRESSION:a PAR_END BRA_START INSTRUCTIONS:b BRA_END ELSE BRA_START INSTRUCTIONS:c BRA_END {: RESULT = new If(a, b, c, aleft, aright); :}
-            | IF PAR_START EXPRESSION:a PAR_END BRA_START INSTRUCTIONS:b BRA_END ELSE IF PAR_START EXPRESSION:c PAR_END BRA_START INSTRUCTIONS:d BRA_END {: RESULT = new If(a, b, c, d, aleft, aright); :}
 ;
 
 CASE ::= EXPRESSION:a EQUALS GREATER_THAN BRA_START INSTRUCTIONS:b BRA_END {: RESULT = new Case(a, b, aleft, aright); :}
@@ -170,6 +173,9 @@ LOOP_DO ::= DO BRA_START INSTRUCTIONS:a BRA_END WHILE PAR_START EXPRESSION:b PAR
 ;
 
 BREAKS ::= BREAK:a {: RESULT = new Break(aleft, aright); :}
+;
+
+CONTINUES ::= CONTINUE:a {: RESULT = new Continue(aleft, aright); :}
 ;
 
 EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, aright); :} %prec UMINUS

@@ -5,27 +5,38 @@ import java.util.HashMap;
 public class SymbolsTable {
 
     private HashMap<String, Symbol_> currentTable;
-    private String name;
     private SymbolsTable prevTable;
+    private STableType type;
+    private boolean isBroken;
+    private boolean isUncontinued;
 
-    public SymbolsTable() {
+    public SymbolsTable(STableType type) {
         this.currentTable = new HashMap<>();
-        this.name = "";
+        this.type = type;
+        this.isBroken = false;
     }
 
-    public SymbolsTable(SymbolsTable prevTable) {
+    public SymbolsTable(SymbolsTable prevTable, STableType type) {
         this.prevTable = prevTable;
         this.currentTable = new HashMap<>();
-        this.name = "";
+        this.type = type;
+        this.isBroken = false;
+    }
 
+    public boolean isBroken() {
+        return isBroken;
+    }
+
+    public boolean isUncontinued() {
+        return isUncontinued;
+    }
+
+    public STableType getType() {
+        return type;
     }
 
     public HashMap<String, Symbol_> getCurrentTable() {
         return currentTable;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public SymbolsTable getPrevTable() {
@@ -36,8 +47,12 @@ public class SymbolsTable {
         this.currentTable = currentTable;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBroken(boolean broken) {
+        isBroken = broken;
+    }
+
+    public void setUncontinued(boolean uncontinued) {
+        isUncontinued = uncontinued;
     }
 
     public boolean setVariable (Symbol_ symbol) {

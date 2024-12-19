@@ -5,31 +5,30 @@ import org.example.compscript.parser.exceptions.CompError;
 import org.example.compscript.parser.exceptions.ErrorType;
 import org.example.compscript.parser.symbol.*;
 
-public class Break extends Instruction {
+public class Continue extends Instruction {
 
-    public Break(int line, int column) {
+    public Continue(int line, int column) {
         super(new Type(dataType.VOID), line, column);
     }
 
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
-
-        SymbolsTable loopTable = getBrokenEnvironment(symbolsTable);
+        SymbolsTable loopTable = getUncontinuedEnvironment(symbolsTable);
 
         if(loopTable == null) return new CompError(
                 ErrorType.SEMANTIC,
-                "The sentence break can only be used inside of a loop.",
+                "The sentence continue can only be used inside of a loop.",
                 this.line,
                 this.column
         );
 
-        loopTable.setBroken(true);
+        loopTable.setUncontinued(true);
 
         return null;
 
     }
 
-    public SymbolsTable getBrokenEnvironment(SymbolsTable symbolsTable) {
+    public SymbolsTable getUncontinuedEnvironment(SymbolsTable symbolsTable) {
         for(var i=symbolsTable; i!= null; i = i.getPrevTable()){
             if(i.getType() == STableType.LOOP){
                 return i;
