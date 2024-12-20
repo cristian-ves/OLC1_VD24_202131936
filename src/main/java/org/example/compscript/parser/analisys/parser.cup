@@ -24,6 +24,8 @@ import org.example.compscript.parser.instructions.loop.While;
 import org.example.compscript.parser.instructions.loop.DoWhile;
 import org.example.compscript.parser.instructions.loop.Break;
 import org.example.compscript.parser.instructions.loop.Continue;
+import org.example.compscript.parser.instructions.lists.ListDeclaration;
+import org.example.compscript.parser.instructions.lists.Push;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -72,7 +74,7 @@ action code {:
 terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR, ID;
 terminal IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
 terminal END, COLON, CONSOLE, DOT, LOG, CAST, AS, CONST, LET, BRA_START, BRA_END, SBRA_START, SBRA_END, COMMA;
-terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW;
+terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW, LIST, PUSH;
 terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
 terminal EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
 terminal OR, AND, NOT;
@@ -81,7 +83,7 @@ terminal OR, AND, NOT;
 nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES, ARRAY_DATA;
 nonterminal LinkedList<LinkedList<Instruction>> ARRAY2D_DATA;
 nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT, IF_SENTENCE, MATCH_SENTENCE, CASE;
-nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS, CONTINUES;
+nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS, CONTINUES, LIST_INST;
 nonterminal Instruction EXPRESSION;
 nonterminal Type TYPE_RW;
 nonterminal String MUTABILITY, COUNTER;
@@ -119,7 +121,12 @@ INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
             | LOOP_DO:a END {: RESULT = a; :}
             | BREAKS:a END {: RESULT = a; :}
             | CONTINUES:a END {: RESULT = a; :}
+            | LIST_INST:a END {: RESULT = a; :}
             | error END {: RESULT = null; :}
+            | error {: RESULT = null; :}
+;
+
+LIST_INST ::= ID:a DOT PUSH PAR_START EXPRESSION:b PAR_END {: RESULT = new Push(a, b, aleft, aright); :}
 ;
 
 PRINT ::= CONSOLE DOT LOG PAR_START EXPRESSION:a PAR_END {: RESULT = new Print(a, aleft, aright); :}
@@ -146,6 +153,7 @@ ARRAY2D_DATA ::= ARRAY2D_DATA:a COMMA SBRA_START ARRAY_DATA:b SBRA_END {: RESULT
 
 DECLARATION ::= MUTABILITY:a ID:b COLON TYPE_RW:c EQUALS EXPRESSION:d {: RESULT = new Declaration(a, b, c, d, aleft, aright); :}
             | MUTABILITY:a ID:b COLON TYPE_RW:c {: RESULT = new Declaration(a, b, c, aleft, aright); :}
+            | MUTABILITY:a ID:b COLON LIST LESS_THAN TYPE_RW:c GREATER_THAN {: RESULT = new ListDeclaration(a, b, c, aleft, aright); :}
             | MUTABILITY:a ID:b COLON TYPE_RW:c SBRA_START SBRA_END EQUALS SBRA_START ARRAY_DATA:d SBRA_END {: RESULT = new ArrayDeclaration(a, b, c, d, aleft, aright); :}
             | MUTABILITY:a ID:b COLON TYPE_RW:c SBRA_START SBRA_END SBRA_START SBRA_END EQUALS SBRA_START ARRAY2D_DATA:d SBRA_END {: RESULT = new Array2DDeclaration(a, b, c, d, aleft, aright); :}
 ;

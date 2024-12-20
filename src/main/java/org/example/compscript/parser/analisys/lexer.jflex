@@ -35,6 +35,12 @@ digit = [0-9]
 <YYINITIAL> {
 
     //Reserved words
+    "list" {
+        return new Symbol(sym.LIST, yyline, yycolumn, yytext());
+    }
+    "push" {
+        return new Symbol(sym.PUSH, yyline, yycolumn, yytext());
+    }
     "int" {
         return new Symbol(sym.INT_RW, yyline, yycolumn, yytext());
     }

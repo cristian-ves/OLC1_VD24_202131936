@@ -56,13 +56,11 @@ public class SymbolsTable {
     }
 
     public boolean setVariable (Symbol_ symbol) {
-        for(SymbolsTable i = this; i != null; i = i.prevTable) {
 
-            Symbol_ searchedSymbol = (Symbol_) i.currentTable.get(symbol.getId().toLowerCase());
-            if (searchedSymbol == null) {
-                i.currentTable.put(symbol.getId().toLowerCase(), symbol);
-                 return true;
-            }
+        Symbol_ searchedSymbol = (Symbol_) this.currentTable.get(symbol.getId().toLowerCase());
+        if (searchedSymbol == null) {
+            this.currentTable.put(symbol.getId().toLowerCase(), symbol);
+             return true;
         }
 
         return false;
@@ -91,7 +89,6 @@ public class SymbolsTable {
         symbol.setMutable(true);
 
         if(searchedSymbol.getType().getType() == symbol.getType().getType()) {
-//            this.currentTable.put(id.toLowerCase(), symbol);
             searchedSymbol.setValue(symbol.getValue());
             return 2; // success
         }
