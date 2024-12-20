@@ -53,6 +53,9 @@ digit = [0-9]
     "pop" {
         return new Symbol(sym.POP, yyline, yycolumn, yytext());
     }
+    "reverse" {
+        return new Symbol(sym.REVERSE, yyline, yycolumn, yytext());
+    }
     "int" {
         return new Symbol(sym.INT_RW, yyline, yycolumn, yytext());
     }
