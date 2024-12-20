@@ -41,6 +41,9 @@ public class For extends Instruction {
 
             for (var instruction : this.instructions) {
                 var resInst = instruction.interpret(tree, newTable);
+                if(resInst instanceof CompError){
+                    tree.addError((CompError) resInst);
+                }
                 if(newTable.isBroken()) break;
                 if(newTable.isUncontinued()) {
                     newTable.setUncontinued(false);

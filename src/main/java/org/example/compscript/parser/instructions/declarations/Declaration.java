@@ -1,9 +1,11 @@
-package org.example.compscript.parser.instructions;
+package org.example.compscript.parser.instructions.declarations;
 
 import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.exceptions.CompError;
 import org.example.compscript.parser.exceptions.ErrorType;
 import org.example.compscript.parser.symbol.*;
+
+import java.util.LinkedList;
 
 public class Declaration extends Instruction {
 
@@ -11,6 +13,7 @@ public class Declaration extends Instruction {
     private Instruction value;
     private boolean isMutable;
     private Object defaultValue;
+    private LinkedList<Instruction> expressions;
 
     public Declaration(String isMutable, String id, Type type, Instruction value, int line, int column) {
         super(type, line, column);
@@ -40,6 +43,7 @@ public class Declaration extends Instruction {
 
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
+
         if(value == null){
             if(defaultValue instanceof CompError) return defaultValue;
 

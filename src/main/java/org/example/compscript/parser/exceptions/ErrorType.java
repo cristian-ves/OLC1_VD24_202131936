@@ -4,7 +4,8 @@ public enum ErrorType {
     SEMANTIC("Semantic"),
     LEXICAL("Lexical"),
     SINTACTICR("Recovered sintactic"),
-    SINTACTICU("Unrecoverable sintactic");
+    SINTACTICU("Unrecoverable sintactic"),
+    RUNTIME("Runtime");
 
     private final String value;
 

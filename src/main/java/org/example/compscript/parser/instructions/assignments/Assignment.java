@@ -1,4 +1,4 @@
-package org.example.compscript.parser.instructions;
+package org.example.compscript.parser.instructions.assignments;
 
 import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.exceptions.CompError;
@@ -32,7 +32,7 @@ public class Assignment extends Instruction {
             );
             case 1 -> new CompError(
                     ErrorType.SEMANTIC,
-                    "The const variable " + id + " is unmutable",
+                    "The const variable " + id + " is immutable",
                     this.line,
                     this.column
             );

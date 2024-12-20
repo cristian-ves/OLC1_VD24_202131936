@@ -8,8 +8,12 @@ import org.example.compscript.parser.symbol.*;
 
 // Instructions
 import org.example.compscript.parser.instructions.Print;
-import org.example.compscript.parser.instructions.Declaration;
-import org.example.compscript.parser.instructions.Assignment;
+import org.example.compscript.parser.instructions.declarations.Declaration;
+import org.example.compscript.parser.instructions.declarations.ArrayDeclaration;
+import org.example.compscript.parser.instructions.declarations.Array2DDeclaration;
+import org.example.compscript.parser.instructions.assignments.Assignment;
+import org.example.compscript.parser.instructions.assignments.ArrAssignment;
+import org.example.compscript.parser.instructions.assignments.Arr2DAssignment;
 import org.example.compscript.parser.instructions.IncrementDecrement;
 import org.example.compscript.parser.instructions.If;
 import org.example.compscript.parser.instructions.match.Match;
@@ -29,6 +33,8 @@ import org.example.compscript.parser.expresions.operators.logic.*;
 import org.example.compscript.parser.exceptions.*;
 import org.example.compscript.parser.expresions.cast.Cast;
 import org.example.compscript.parser.expresions.variables.Access;
+import org.example.compscript.parser.expresions.variables.ArrAccess;
+import org.example.compscript.parser.expresions.variables.Arr2DAccess;
 
 
 // Class name
@@ -42,7 +48,7 @@ parser code {:
     public void syntax_error(Symbol s){
         sintacticErrors.add(new CompError(
             ErrorType.SINTACTICR, 
-            "Component did not expected " + s.value,
+            "Component did not expect " + s.value,
             s.left,
             s.right
         ));
@@ -51,7 +57,7 @@ parser code {:
     public void unrecovered_syntax_error (Symbol s){
         sintacticErrors.add(new CompError(
             ErrorType.SINTACTICU, 
-            "Component did not expected " + s.value,
+            "Component did not expect " + s.value,
             s.left,
             s.right
         ));
@@ -65,14 +71,15 @@ action code {:
 // Terminals
 terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR, ID;
 terminal IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
-terminal END, COLON, CONSOLE, DOT, LOG, CAST, AS, CONST, LET, BRA_START, BRA_END;
+terminal END, COLON, CONSOLE, DOT, LOG, CAST, AS, CONST, LET, BRA_START, BRA_END, SBRA_START, SBRA_END, COMMA;
 terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW;
 terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
 terminal EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
 terminal OR, AND, NOT;
 
 // Non-terminals
-nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES;
+nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES, ARRAY_DATA;
+nonterminal LinkedList<LinkedList<Instruction>> ARRAY2D_DATA;
 nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT, IF_SENTENCE, MATCH_SENTENCE, CASE;
 nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS, CONTINUES;
 nonterminal Instruction EXPRESSION;
@@ -129,11 +136,23 @@ TYPE_RW ::= INT_RW {: RESULT = new Type(dataType.WHOLE); :}
          | STRING_RW {: RESULT = new Type(dataType.STRING); :}
 ;
 
+ARRAY_DATA ::= ARRAY_DATA:a COMMA EXPRESSION:b {: RESULT = a; RESULT.add(b); :}
+            | EXPRESSION:a {: RESULT = new LinkedList<Instruction>(); RESULT.add(a); :}
+;
+
+ARRAY2D_DATA ::= ARRAY2D_DATA:a COMMA SBRA_START ARRAY_DATA:b SBRA_END {: RESULT = a; RESULT.add(b); :}
+            | SBRA_START ARRAY_DATA:a SBRA_END {: RESULT = new LinkedList<LinkedList<Instruction>>(); RESULT.add(a); :}
+;
+
 DECLARATION ::= MUTABILITY:a ID:b COLON TYPE_RW:c EQUALS EXPRESSION:d {: RESULT = new Declaration(a, b, c, d, aleft, aright); :}
             | MUTABILITY:a ID:b COLON TYPE_RW:c {: RESULT = new Declaration(a, b, c, aleft, aright); :}
+            | MUTABILITY:a ID:b COLON TYPE_RW:c SBRA_START SBRA_END EQUALS SBRA_START ARRAY_DATA:d SBRA_END {: RESULT = new ArrayDeclaration(a, b, c, d, aleft, aright); :}
+            | MUTABILITY:a ID:b COLON TYPE_RW:c SBRA_START SBRA_END SBRA_START SBRA_END EQUALS SBRA_START ARRAY2D_DATA:d SBRA_END {: RESULT = new Array2DDeclaration(a, b, c, d, aleft, aright); :}
 ;
 
 ASSIGNMENT ::= ID:a EQUALS EXPRESSION:b {: RESULT = new Assignment(a, b, aleft, aright); :}
+            | ID:a SBRA_START EXPRESSION:b SBRA_END EQUALS EXPRESSION:c {: RESULT = new ArrAssignment(a, b, c, aleft, aright); :}
+            | ID:a SBRA_START EXPRESSION:b SBRA_END SBRA_START EXPRESSION:c SBRA_END EQUALS EXPRESSION:d {: RESULT = new Arr2DAssignment(a, b, c, d, aleft, aright); :}
 ;
 
 COUNTER ::= PLUS PLUS {: RESULT = "plus"; :}
@@ -202,5 +221,7 @@ EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, arig
             | CHAR:a {: RESULT = new Native(a.charAt(0), new Type(dataType.CHAR), aleft, aright); :}
             | ID:a {: RESULT = new Access(a, aleft, aright); :}
             | CAST PAR_START EXPRESSION:a AS TYPE_RW:b PAR_END {: RESULT = new Cast(a, b, aleft, aright); :}
+            | ID:a SBRA_START EXPRESSION:b SBRA_END {: RESULT = new ArrAccess(a, b, aleft, aright); :}
+            | ID:a SBRA_START EXPRESSION:b SBRA_END SBRA_START EXPRESSION:c SBRA_END {: RESULT = new Arr2DAccess(a, b, c, aleft, aright); :}
             | PAR_START EXPRESSION:a PAR_END {: RESULT = a; :}
 ;
