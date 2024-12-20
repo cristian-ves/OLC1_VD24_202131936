@@ -44,6 +44,9 @@ digit = [0-9]
     "get" {
         return new Symbol(sym.GET, yyline, yycolumn, yytext());
     }
+    "set" {
+        return new Symbol(sym.SET, yyline, yycolumn, yytext());
+    }
     "int" {
         return new Symbol(sym.INT_RW, yyline, yycolumn, yytext());
     }

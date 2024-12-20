@@ -11,42 +11,42 @@ public class sym {
   public static final int CAST = 22;
   public static final int SBRA_END = 29;
   public static final int WHOLE = 2;
-  public static final int GREATER_EQUAL_THAN = 55;
-  public static final int POWER = 47;
+  public static final int GREATER_EQUAL_THAN = 56;
+  public static final int POWER = 48;
   public static final int CONST = 24;
   public static final int CHAR = 6;
-  public static final int EQUALS = 44;
-  public static final int UMINUS = 43;
-  public static final int PAR_END = 40;
+  public static final int EQUALS = 45;
+  public static final int UMINUS = 44;
+  public static final int PAR_END = 41;
   public static final int INT_RW = 31;
   public static final int PUSH = 37;
-  public static final int NOT_EQUAL = 51;
-  public static final int LESS_EQUAL_THAN = 54;
+  public static final int NOT_EQUAL = 52;
+  public static final int LESS_EQUAL_THAN = 55;
   public static final int DOUBLE = 4;
   public static final int CONTINUE = 16;
-  public static final int MINUS = 42;
+  public static final int MINUS = 43;
   public static final int FOR = 13;
-  public static final int GREATER_THAN = 53;
+  public static final int GREATER_THAN = 54;
   public static final int MATCH = 10;
   public static final int DOUBLE_RW = 32;
-  public static final int NOT = 58;
-  public static final int AND = 57;
+  public static final int NOT = 59;
+  public static final int AND = 58;
   public static final int BRA_START = 26;
-  public static final int OR = 56;
+  public static final int OR = 57;
   public static final int COMMA = 30;
   public static final int GET = 38;
-  public static final int PLUS = 41;
+  public static final int PLUS = 42;
   public static final int IF = 8;
   public static final int DOT = 20;
   public static final int ID = 7;
   public static final int EOF = 0;
   public static final int BOOLEAN = 5;
-  public static final int EQUALS_TO = 50;
+  public static final int EQUALS_TO = 51;
   public static final int CHAR_RW = 33;
   public static final int error = 1;
   public static final int BRA_END = 27;
   public static final int SBRA_START = 28;
-  public static final int MODULO = 49;
+  public static final int MODULO = 50;
   public static final int BREAK = 15;
   public static final int LOG = 21;
   public static final int COLON = 18;
@@ -57,16 +57,17 @@ public class sym {
   public static final int LET = 25;
   public static final int BOOL_RW = 34;
   public static final int END = 17;
-  public static final int ROOT = 48;
+  public static final int ROOT = 49;
   public static final int STRING = 3;
   public static final int AS = 23;
-  public static final int DIVISION = 46;
-  public static final int LESS_THAN = 52;
+  public static final int DIVISION = 47;
+  public static final int LESS_THAN = 53;
   public static final int STRING_RW = 35;
-  public static final int MULTIPLICATION = 45;
+  public static final int MULTIPLICATION = 46;
   public static final int DO = 14;
   public static final int CONSOLE = 19;
-  public static final int PAR_START = 39;
+  public static final int SET = 39;
+  public static final int PAR_START = 40;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -107,6 +108,7 @@ public class sym {
   "LIST",
   "PUSH",
   "GET",
+  "SET",
   "PAR_START",
   "PAR_END",
   "PLUS",
