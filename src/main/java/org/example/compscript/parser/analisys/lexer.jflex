@@ -47,6 +47,9 @@ digit = [0-9]
     "set" {
         return new Symbol(sym.SET, yyline, yycolumn, yytext());
     }
+    "remove" {
+        return new Symbol(sym.REMOVE, yyline, yycolumn, yytext());
+    }
     "int" {
         return new Symbol(sym.INT_RW, yyline, yycolumn, yytext());
     }
