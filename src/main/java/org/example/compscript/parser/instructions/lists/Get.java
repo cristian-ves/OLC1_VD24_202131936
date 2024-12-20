@@ -22,7 +22,16 @@ public class Get extends ListMethod {
         var pos = getPosition(tree, symbolsTable);
         if(pos instanceof CompError) return pos;
 
-        return ((LinkedList<Object>)((Symbol_) list).getValue()).get((int) pos);
+        try{
+            return ((LinkedList<Object>)((Symbol_) list).getValue()).get((int) pos);
+        }catch (IndexOutOfBoundsException e){
+            return new CompError(
+                    ErrorType.RUNTIME,
+                    "Index out of bounds: index: " + (int) pos + ", size: " + ((LinkedList<Object>)((Symbol_) list).getValue()).size(),
+                    line,
+                    column
+            );
+        }
 
     }
 }

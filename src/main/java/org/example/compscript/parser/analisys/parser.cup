@@ -29,6 +29,7 @@ import org.example.compscript.parser.instructions.lists.Push;
 import org.example.compscript.parser.instructions.lists.Get;
 import org.example.compscript.parser.instructions.lists.Set;
 import org.example.compscript.parser.instructions.lists.Remove;
+import org.example.compscript.parser.instructions.lists.Pop;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -77,7 +78,7 @@ action code {:
 terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR, ID;
 terminal IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
 terminal END, COLON, CONSOLE, DOT, LOG, CAST, AS, CONST, LET, BRA_START, BRA_END, SBRA_START, SBRA_END, COMMA;
-terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW, LIST, PUSH, GET, SET, REMOVE;
+terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW, LIST, PUSH, GET, SET, REMOVE, POP;
 terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
 terminal EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
 terminal OR, AND, NOT;
@@ -131,7 +132,8 @@ INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
 
 LIST_INST ::= ID:a DOT PUSH PAR_START EXPRESSION:b PAR_END {: RESULT = new Push(a, b, aleft, aright); :}
             | ID:a DOT SET PAR_START EXPRESSION:b COMMA EXPRESSION:c PAR_END {: RESULT = new Set(a, b, c, aleft, aright); :}
-            | ID:a DOT REMOVE PAR_START EXPRESSION:b PAR_END {: RESULT = new Remove(a, b, aleft, aright); :}
+            | ID:a DOT REMOVE PAR_START EXPRESSION:b PAR_END {: RESULT = new Remove(b, a, aleft, aright); :}
+            | ID:a DOT POP PAR_START PAR_END {: RESULT = new Pop(a, aleft, aright); :}
 ;
 
 PRINT ::= CONSOLE DOT LOG PAR_START EXPRESSION:a PAR_END {: RESULT = new Print(a, aleft, aright); :}
@@ -237,5 +239,7 @@ EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, arig
             | ID:a SBRA_START EXPRESSION:b SBRA_END {: RESULT = new ArrAccess(a, b, aleft, aright); :}
             | ID:a SBRA_START EXPRESSION:b SBRA_END SBRA_START EXPRESSION:c SBRA_END {: RESULT = new Arr2DAccess(a, b, c, aleft, aright); :}
             | ID:a DOT GET PAR_START EXPRESSION:b PAR_END {: RESULT = new Get(a, b, aleft, aright); :}
+            | ID:a DOT REMOVE PAR_START EXPRESSION:b PAR_END {: RESULT = new Remove(b, a, aleft, aright); :}
+            | ID:a DOT POP PAR_START PAR_END {: RESULT = new Pop(a, aleft, aright); :}
             | PAR_START EXPRESSION:a PAR_END {: RESULT = a; :}
 ;

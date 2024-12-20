@@ -50,6 +50,9 @@ digit = [0-9]
     "remove" {
         return new Symbol(sym.REMOVE, yyline, yycolumn, yytext());
     }
+    "pop" {
+        return new Symbol(sym.POP, yyline, yycolumn, yytext());
+    }
     "int" {
         return new Symbol(sym.INT_RW, yyline, yycolumn, yytext());
     }
