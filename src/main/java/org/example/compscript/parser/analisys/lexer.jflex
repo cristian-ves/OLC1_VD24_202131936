@@ -41,6 +41,9 @@ digit = [0-9]
     "push" {
         return new Symbol(sym.PUSH, yyline, yycolumn, yytext());
     }
+    "get" {
+        return new Symbol(sym.GET, yyline, yycolumn, yytext());
+    }
     "int" {
         return new Symbol(sym.INT_RW, yyline, yycolumn, yytext());
     }
