@@ -7,51 +7,22 @@ import org.example.compscript.parser.symbol.*;
 
 import java.util.LinkedList;
 
-public class Get extends Instruction {
-
-    private String id;
-    private Instruction exp;
+public class Get extends ListMethod {
 
     public Get(String id, Instruction exp, int line, int column) {
-        super(new Type(dataType.VOID), column, line);
-        this.id = id;
-        this.exp = exp;
+        super(exp, id, line, column);
     }
 
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
-        Symbol_ list = symbolsTable.getVariable(this.id);
 
-        if(list == null)
-            return new CompError(
-                    ErrorType.SEMANTIC,
-                    "The list " + id + " hasn't been declared yet",
-                    line,
-                    column
-            );
+        var list = getList(symbolsTable);
+        if (list instanceof CompError) return list;
 
-        var res = this.exp.interpret(tree, symbolsTable);
-        if (res instanceof CompError) return res;
+        var pos = getPosition(tree, symbolsTable);
+        if(pos instanceof CompError) return pos;
 
-        if (this.exp.type.getType() != dataType.WHOLE)
-            return new CompError(
-                    ErrorType.SEMANTIC,
-                    "List.get() requires an int. provided: "  + this.exp.type.getType().getValue(),
-                    line,
-                    column
-            );
+        return ((LinkedList<Object>)((Symbol_) list).getValue()).get((int) pos);
 
-        this.type.setType(list.getType().getType());
-
-        try {
-            return ((LinkedList<Object>)list.getValue()).get((int) res);
-        } catch (IndexOutOfBoundsException e) {
-            return new CompError(
-                    ErrorType.RUNTIME,
-                    "Index out of bounds: Index: " + (int) res + ", Size: " + ((LinkedList<Object>)list.getValue()).size(),
-                    line,
-                    column
-            );
-        }
     }
 }

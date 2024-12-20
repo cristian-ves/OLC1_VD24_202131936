@@ -7,42 +7,23 @@ import org.example.compscript.parser.symbol.*;
 
 import java.util.LinkedList;
 
-public class Push extends Instruction {
-
-    private String id;
-    private Instruction exp;
+public class Push extends ListMethod {
 
     public Push(String id, Instruction exp, int line, int column) {
-        super(new Type(dataType.VOID), line, column);
-        this.id = id;
-        this.exp = exp;
+        super(id, exp, line, column);
     }
 
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
-        Symbol_ list = symbolsTable.getVariable(this.id);
+        var list = getList(symbolsTable);
+        if (list instanceof CompError) return list;
 
-        if(list == null)
-            return new CompError(
-                    ErrorType.SEMANTIC,
-                    "The list " + id + " hasn't been declared yet",
-                    line,
-                    column
-            );
+        var newValueRes = getExpRes(tree, symbolsTable);
+        if(newValueRes instanceof CompError) return newValueRes;
 
-        var res = this.exp.interpret(tree, symbolsTable);
-        if (res instanceof CompError) return res;
-
-        if (this.exp.type.getType() != list.getType().getType())
-            return new CompError(
-                    ErrorType.SEMANTIC,
-                    "Incorrect type in push: required: " + list.getType().getType().getValue() + ", provided: " + this.exp.type.getType().getValue(),
-                    line,
-                    column
-            );
-
-        ((LinkedList<Object>)list.getValue()).add(res);
+        ((LinkedList<Object>)((Symbol_) list).getValue()).add(newValueRes);
         return null;
+
 
     }
 }

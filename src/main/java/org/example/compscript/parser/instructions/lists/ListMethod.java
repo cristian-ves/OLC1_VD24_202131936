@@ -12,7 +12,13 @@ public abstract class ListMethod extends Instruction {
     protected Instruction valueExp;
     protected Symbol_ list;
 
-    public ListMethod(String id, Instruction posExp, int line, int column) {
+    public ListMethod(String id, Instruction valueExp, int line, int column) {
+        super(new Type(dataType.VOID), line, column);
+        this.id = id;
+        this.valueExp = valueExp;
+    }
+
+    public ListMethod(Instruction posExp, String id, int line, int column) {
         super(new Type(dataType.VOID), line, column);
         this.id = id;
         this.posExp = posExp;
