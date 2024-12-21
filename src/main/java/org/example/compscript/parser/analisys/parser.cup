@@ -31,6 +31,8 @@ import org.example.compscript.parser.instructions.lists.Set;
 import org.example.compscript.parser.instructions.lists.Remove;
 import org.example.compscript.parser.instructions.lists.Pop;
 import org.example.compscript.parser.instructions.lists.Reverse;
+import org.example.compscript.parser.instructions.structs.StructDeclaration;
+import org.example.compscript.parser.instructions.structs.StructTypeIns;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -79,15 +81,15 @@ action code {:
 terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR, ID;
 terminal IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
 terminal END, COLON, CONSOLE, DOT, LOG, CAST, AS, CONST, LET, BRA_START, BRA_END, SBRA_START, SBRA_END, COMMA;
-terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW, LIST, PUSH, GET, SET, REMOVE, POP, REVERSE;
+terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW, LIST, PUSH, GET, SET, REMOVE, POP, REVERSE, STRUCT;
 terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
 terminal EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
 terminal OR, AND, NOT;
 
 // Non-terminals
-nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES, ARRAY_DATA;
+nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES, ARRAY_DATA, STRUCT_LIST;
 nonterminal LinkedList<LinkedList<Instruction>> ARRAY2D_DATA;
-nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT, IF_SENTENCE, MATCH_SENTENCE, CASE;
+nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT, IF_SENTENCE, MATCH_SENTENCE, CASE, STRUCT_INST;
 nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS, CONTINUES, LIST_INST;
 nonterminal Instruction EXPRESSION;
 nonterminal Type TYPE_RW;
@@ -127,8 +129,16 @@ INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
             | BREAKS:a END {: RESULT = a; :}
             | CONTINUES:a END {: RESULT = a; :}
             | LIST_INST:a END {: RESULT = a; :}
+            | STRUCT_INST:a END {: RESULT = a; :}
             | error END {: RESULT = null; :}
             | error {: RESULT = null; :}
+;
+
+STRUCT_INST ::= STRUCT ID:a BRA_START STRUCT_LIST:b BRA_END {: RESULT = new StructDeclaration(a, b, aleft, aright); :}
+;
+
+STRUCT_LIST ::= STRUCT_LIST:a ID:b COLON TYPE_RW:c END {: RESULT = a; RESULT.add(new StructTypeIns(b, c, bleft, bright)); :}
+            | ID:a COLON TYPE_RW:b END {: RESULT = new LinkedList<Instruction>(); RESULT.add(new StructTypeIns(a, b, aleft, aright)); :}
 ;
 
 LIST_INST ::= ID:a DOT PUSH PAR_START EXPRESSION:b PAR_END {: RESULT = new Push(a, b, aleft, aright); :}

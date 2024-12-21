@@ -35,10 +35,13 @@ digit = [0-9]
 <YYINITIAL> {
 
     //Reserved words
+    "struct" {
+        return new Symbol(sym.STRUCT, yyline, yycolumn, yytext());
+    }
     "list" {
         return new Symbol(sym.LIST, yyline, yycolumn, yytext());
     }
-    "push" {
+    "append" {
         return new Symbol(sym.PUSH, yyline, yycolumn, yytext());
     }
     "get" {
