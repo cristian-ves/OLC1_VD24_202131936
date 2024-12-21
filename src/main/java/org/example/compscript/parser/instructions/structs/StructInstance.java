@@ -38,7 +38,10 @@ public class StructInstance extends Instruction {
         Symbol_ structInstance = new Symbol_(new Type(dataType.VOID), id, map, isMutable);
 
         for (Instruction valueIns : values) {
-            LinkedList<Object> valueResult = (LinkedList<Object>) valueIns.interpret(tree, symbolsTable);
+            var res = valueIns.interpret(tree, symbolsTable);
+            if ( res instanceof CompError) return  res;
+
+            LinkedList<Object> valueResult = (LinkedList<Object>) res;
             String valueId = (String) valueResult.get(0);
             Object value = valueResult.get(1);
             if(value instanceof CompError) return value;

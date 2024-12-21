@@ -35,6 +35,7 @@ import org.example.compscript.parser.instructions.structs.StructDeclaration;
 import org.example.compscript.parser.instructions.structs.StructTypeIns;
 import org.example.compscript.parser.instructions.structs.StructInstance;
 import org.example.compscript.parser.instructions.structs.StructValue;
+import org.example.compscript.parser.instructions.structs.StructAccess;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -260,5 +261,6 @@ EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, arig
             | ID:a DOT GET PAR_START EXPRESSION:b PAR_END {: RESULT = new Get(a, b, aleft, aright); :}
             | ID:a DOT REMOVE PAR_START EXPRESSION:b PAR_END {: RESULT = new Remove(b, a, aleft, aright); :}
             | ID:a DOT POP PAR_START PAR_END {: RESULT = new Pop(a, aleft, aright); :}
+            | ID:a DOT ID:b {: RESULT = new StructAccess(a, b, aleft, aright); :}
             | PAR_START EXPRESSION:a PAR_END {: RESULT = a; :}
 ;
