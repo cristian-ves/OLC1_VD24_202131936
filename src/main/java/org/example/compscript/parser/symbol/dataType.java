@@ -6,7 +6,8 @@ public enum dataType {
     BOOLEAN("bool"),
     CHAR("char"),
     STRING("string"),
-    VOID("void");
+    VOID("void"),
+    STRUCT("struct");
 
     private final String value;
 

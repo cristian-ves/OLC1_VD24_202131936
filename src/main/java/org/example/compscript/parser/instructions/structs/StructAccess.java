@@ -6,6 +6,7 @@ import org.example.compscript.parser.exceptions.ErrorType;
 import org.example.compscript.parser.symbol.*;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class StructAccess extends Instruction {
 
@@ -20,8 +21,8 @@ public class StructAccess extends Instruction {
 
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
-        Symbol_ struct = symbolsTable.getVariable(structId);
-        if (struct == null)
+        Symbol_ structSymbol = symbolsTable.getVariable(structId);
+        if (structSymbol == null)
             return new CompError(
                     ErrorType.SEMANTIC,
                     structId + " variable hasn't been declared yet",
@@ -29,9 +30,19 @@ public class StructAccess extends Instruction {
                     column
             );
 
-        HashMap<String, Object> structMap = (HashMap<String, Object>) struct.getValue();
-        var field = structMap.get(fieldId);
-        if (field == null)
+        if(structSymbol.getType().getType() != dataType.STRUCT)
+            return new CompError(
+                    ErrorType.SEMANTIC,
+                    structId + " is not a struct instance",
+                    column,
+                    line
+            );
+
+        StructInstance instance = (StructInstance) structSymbol.getValue();
+        HashMap<String, LinkedList<Object>> instanceMap = instance.getMap();
+        LinkedList<Object> fieldProps = instanceMap.get(fieldId);
+        var fieldValue = fieldProps.get(0);
+        if (fieldValue == null)
             return new CompError(
                     ErrorType.SEMANTIC,
                     fieldId + " is not a " + structId + " field.",
@@ -39,6 +50,8 @@ public class StructAccess extends Instruction {
                     column
             );
 
-        return field;
+        this.type.setType(((Type) fieldProps.get(1)).getType());
+
+        return fieldValue;
     }
 }

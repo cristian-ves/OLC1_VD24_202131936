@@ -33,9 +33,10 @@ import org.example.compscript.parser.instructions.lists.Pop;
 import org.example.compscript.parser.instructions.lists.Reverse;
 import org.example.compscript.parser.instructions.structs.StructDeclaration;
 import org.example.compscript.parser.instructions.structs.StructTypeIns;
-import org.example.compscript.parser.instructions.structs.StructInstance;
+import org.example.compscript.parser.instructions.structs.StructInstanceIns;
 import org.example.compscript.parser.instructions.structs.StructValue;
 import org.example.compscript.parser.instructions.structs.StructAccess;
+import org.example.compscript.parser.instructions.structs.StructAssignment;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -178,7 +179,8 @@ DECLARATION ::= MUTABILITY:a ID:b COLON TYPE_RW:c EQUALS EXPRESSION:d {: RESULT 
             | MUTABILITY:a ID:b COLON LIST LESS_THAN TYPE_RW:c GREATER_THAN {: RESULT = new ListDeclaration(a, b, c, aleft, aright); :}
             | MUTABILITY:a ID:b COLON TYPE_RW:c SBRA_START SBRA_END EQUALS SBRA_START ARRAY_DATA:d SBRA_END {: RESULT = new ArrayDeclaration(a, b, c, d, aleft, aright); :}
             | MUTABILITY:a ID:b COLON TYPE_RW:c SBRA_START SBRA_END SBRA_START SBRA_END EQUALS SBRA_START ARRAY2D_DATA:d SBRA_END {: RESULT = new Array2DDeclaration(a, b, c, d, aleft, aright); :}
-            | MUTABILITY:a ID:b COLON ID:c EQUALS BRA_START STRUCT_VALUES_LIST:d BRA_END {: RESULT = new StructInstance(a, b, c, d, aleft, aright); :}
+            | MUTABILITY:a ID:b COLON ID:c EQUALS BRA_START STRUCT_VALUES_LIST:d BRA_END {: RESULT = new StructInstanceIns(a, b, c, d, aleft, aright); :}
+            | ID:a DOT ID:b EQUALS EXPRESSION:c {: RESULT = new StructAssignment(a, b, c, aleft, aright); :}
 ;
 
 STRUCT_VALUES_LIST ::= STRUCT_VALUES_LIST:a COMMA ID:b COLON EXPRESSION:c {: RESULT = a; RESULT.add(new StructValue(b, c, bleft, bright)); :}

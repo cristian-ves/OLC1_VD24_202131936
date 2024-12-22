@@ -54,5 +54,7 @@ public class ArrAccess extends Instruction {
             );
         }
 
+        // add type to returned value to make arithmetic operators work
+
     }
 }
