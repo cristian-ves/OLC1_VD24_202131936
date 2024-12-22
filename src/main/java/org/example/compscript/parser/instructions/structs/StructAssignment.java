@@ -32,6 +32,14 @@ public class StructAssignment extends Instruction {
                     column
             );
 
+        if(!instanceSym.isMutable())
+            return new CompError(
+                    ErrorType.SEMANTIC,
+                    instanceId + " is not mutable",
+                    line,
+                    column
+            );
+
         var newValueRes = newValueExp.interpret(tree, symbolsTable);
         if(newValueRes instanceof CompError) return newValueRes;
 

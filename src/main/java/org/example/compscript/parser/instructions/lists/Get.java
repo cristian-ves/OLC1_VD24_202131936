@@ -23,6 +23,7 @@ public class Get extends ListMethod {
         if(pos instanceof CompError) return pos;
 
         try{
+            this.type.setType(((Symbol_) list).getType().getType());
             return ((LinkedList<Object>)((Symbol_) list).getValue()).get((int) pos);
         }catch (IndexOutOfBoundsException e){
             return new CompError(
