@@ -37,6 +37,7 @@ import org.example.compscript.parser.instructions.structs.StructInstanceIns;
 import org.example.compscript.parser.instructions.structs.StructValue;
 import org.example.compscript.parser.instructions.structs.StructAccess;
 import org.example.compscript.parser.instructions.structs.StructAssignment;
+import org.example.compscript.parser.instructions.funcs.Method;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -85,7 +86,7 @@ action code {:
 terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR, ID;
 terminal IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
 terminal END, COLON, CONSOLE, DOT, LOG, CAST, AS, CONST, LET, BRA_START, BRA_END, SBRA_START, SBRA_END, COMMA;
-terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW, LIST, PUSH, GET, SET, REMOVE, POP, REVERSE, STRUCT;
+terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW, VOID_RW, LIST, PUSH, GET, SET, REMOVE, POP, REVERSE, STRUCT;
 terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
 terminal EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
 terminal OR, AND, NOT;
@@ -94,7 +95,7 @@ terminal OR, AND, NOT;
 nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES, ARRAY_DATA, STRUCT_TYPES_LIST, STRUCT_VALUES_LIST;
 nonterminal LinkedList<LinkedList<Instruction>> ARRAY2D_DATA;
 nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT, IF_SENTENCE, MATCH_SENTENCE, CASE, STRUCT_INST;
-nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS, CONTINUES, LIST_INST;
+nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS, CONTINUES, LIST_INST, METHOD;
 nonterminal Instruction EXPRESSION;
 nonterminal Type TYPE_RW;
 nonterminal String MUTABILITY, COUNTER;
@@ -134,6 +135,7 @@ INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
             | CONTINUES:a END {: RESULT = a; :}
             | LIST_INST:a END {: RESULT = a; :}
             | STRUCT_INST:a END {: RESULT = a; :}
+            | METHOD:a END {: RESULT = a; :}
             | error END {: RESULT = null; :}
             | error {: RESULT = null; :}
 ;
@@ -164,6 +166,10 @@ TYPE_RW ::= INT_RW {: RESULT = new Type(dataType.WHOLE); :}
          | BOOL_RW {: RESULT = new Type(dataType.BOOLEAN); :}
          | CHAR_RW {: RESULT = new Type(dataType.CHAR); :}
          | STRING_RW {: RESULT = new Type(dataType.STRING); :}
+         | VOID_RW {: RESULT = new Type(dataType.VOID); :}
+;
+
+METHOD ::= TYPE_RW:a ID:b PAR_START PAR_END BRA_START INSTRUCTIONS:c BRA_END {: RESULT = new Method(a, b, c, aleft, aright); :}
 ;
 
 ARRAY_DATA ::= ARRAY_DATA:a COMMA EXPRESSION:b {: RESULT = a; RESULT.add(b); :}

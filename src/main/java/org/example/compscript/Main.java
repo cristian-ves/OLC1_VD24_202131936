@@ -11,6 +11,7 @@ import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.analisys.Lexer;
 import org.example.compscript.parser.analisys.Parser;
 import org.example.compscript.parser.exceptions.CompError;
+import org.example.compscript.parser.instructions.funcs.Method;
 import org.example.compscript.parser.symbol.STableType;
 import org.example.compscript.parser.symbol.Tree;
 import org.example.compscript.parser.symbol.SymbolsTable;
@@ -82,16 +83,29 @@ public class Main extends Application {
 
             var ast = new Tree((LinkedList<Instruction>) result.value);
             var table = new SymbolsTable(STableType.MAIN);
+            ast.setGlobalTable(table);
 
             String semanticErrosConsole = "";
 
+            // first ast loop
             for(var a: ast.getInstructions()) {
                 if (a == null) continue;
-                var res = a.interpret(ast, table);
+
+                if(a instanceof Method) {
+                    ast.addFunction(a);
+                    continue;
+                }
+
+                var res = a.interpret(ast, table); // remove this part
                 if(res instanceof CompError) {
                     semanticErrosConsole += res.toString() + "\n";
                 }
+
             }
+
+            // second ast loop, declarations and assignments
+
+            // third ast loop, interpret main
 
             for (var e: ast.getErrors()) {
                 semanticErrosConsole += e.toString() + "\n";

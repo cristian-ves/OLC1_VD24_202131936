@@ -31,6 +31,7 @@ public class DoWhile extends Instruction {
 
         var auxTable = new SymbolsTable(symbolsTable, STableType.LOOP);
         for (var instruction : this.instructions) {
+            if(instruction == null) continue;
             var resInst = instruction.interpret(tree, auxTable);
             if(auxTable.isBroken()) break;
             if(auxTable.isUncontinued()) {
@@ -43,6 +44,7 @@ public class DoWhile extends Instruction {
             var newTable = new SymbolsTable(symbolsTable, STableType.LOOP);
 
             for (var instruction : this.instructions) {
+                if(instruction == null) continue;
                 var resInst = instruction.interpret(tree, newTable);
                 if(newTable.isBroken()) break;
                 if(newTable.isUncontinued()) {

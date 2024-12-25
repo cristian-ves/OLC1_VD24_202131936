@@ -34,6 +34,7 @@ public class While extends Instruction {
             var newTable = new SymbolsTable(symbolsTable, STableType.LOOP);
 
             for (var instruction : this.instructions) {
+                if(instruction == null) continue;
                 var resInst = instruction.interpret(tree, newTable);
                 if(newTable.isBroken()) break;
                 if(newTable.isUncontinued()) {

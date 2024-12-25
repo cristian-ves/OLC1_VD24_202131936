@@ -47,6 +47,7 @@ public class If extends Instruction {
         var newTable = new SymbolsTable(symbolsTable, STableType.IF);
         if((boolean) cond){
             for (var i: this.instructions) {
+                if(i== null) continue;
                 var res = i.interpret(tree, newTable);
                 if (res instanceof CompError) tree.addError((CompError) res);
             }
@@ -56,6 +57,7 @@ public class If extends Instruction {
                 // elseif
                 if((boolean) elseCondition.interpret(tree, newTable)) {
                     for (var i: this.elseInstructions) {
+                        if(i == null) continue;
                         var res = i.interpret(tree, newTable);
                         if (res instanceof CompError) tree.addError((CompError) res);
                     }
@@ -64,6 +66,7 @@ public class If extends Instruction {
             }
 
             for (var i: this.elseInstructions) {
+                if(i == null) continue;
                 var res = i.interpret(tree, newTable);
                 if(res instanceof CompError) tree.addError((CompError) res);
             }

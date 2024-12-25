@@ -59,6 +59,9 @@ digit = [0-9]
     "reverse" {
         return new Symbol(sym.REVERSE, yyline, yycolumn, yytext());
     }
+    "void" {
+        return new Symbol(sym.VOID_RW, yyline, yycolumn, yytext());
+    }
     "int" {
         return new Symbol(sym.INT_RW, yyline, yycolumn, yytext());
     }

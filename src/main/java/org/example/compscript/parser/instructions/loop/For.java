@@ -40,6 +40,7 @@ public class For extends Instruction {
             var newTable = new SymbolsTable(symbolsTable, STableType.LOOP);
 
             for (var instruction : this.instructions) {
+                if(instruction == null) continue;
                 var resInst = instruction.interpret(tree, newTable);
                 if(resInst instanceof CompError){
                     tree.addError((CompError) resInst);
