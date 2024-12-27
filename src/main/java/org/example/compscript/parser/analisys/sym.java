@@ -35,6 +35,7 @@ public class sym {
   public static final int REVERSE = 43;
   public static final int NOT = 64;
   public static final int AND = 63;
+  public static final int RUN_MAIN = 65;
   public static final int BRA_START = 26;
   public static final int OR = 62;
   public static final int COMMA = 30;
@@ -138,7 +139,8 @@ public class sym {
   "GREATER_EQUAL_THAN",
   "OR",
   "AND",
-  "NOT"
+  "NOT",
+  "RUN_MAIN"
   };
 }
 

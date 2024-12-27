@@ -35,6 +35,9 @@ digit = [0-9]
 <YYINITIAL> {
 
     //Reserved words
+    "run_main" {
+        return new Symbol(sym.RUN_MAIN, yyline, yycolumn, yytext());
+    }
     "struct" {
         return new Symbol(sym.STRUCT, yyline, yycolumn, yytext());
     }

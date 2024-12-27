@@ -11,7 +11,10 @@ import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.analisys.Lexer;
 import org.example.compscript.parser.analisys.Parser;
 import org.example.compscript.parser.exceptions.CompError;
+import org.example.compscript.parser.instructions.declarations.Declaration;
 import org.example.compscript.parser.instructions.funcs.Method;
+import org.example.compscript.parser.instructions.funcs.RunMain;
+import org.example.compscript.parser.instructions.structs.StructDeclaration;
 import org.example.compscript.parser.symbol.STableType;
 import org.example.compscript.parser.symbol.Tree;
 import org.example.compscript.parser.symbol.SymbolsTable;
@@ -72,12 +75,12 @@ public class Main extends Application {
             var result = parser.parse();
 
             String sintacticErrorsConsole = "";
-            for(var e: parser.sintacticErrors){
+            for (var e : parser.sintacticErrors) {
                 sintacticErrorsConsole += e.toString() + "\n";
             }
 
             String lexicalErrosConsole = "";
-            for (var l:lex.lexicalErrors) {
+            for (var l : lex.lexicalErrors) {
                 lexicalErrosConsole += l.toString() + "\n";
             }
 
@@ -88,26 +91,43 @@ public class Main extends Application {
             String semanticErrosConsole = "";
 
             // first ast loop
-            for(var a: ast.getInstructions()) {
+            for (var a : ast.getInstructions()) {
                 if (a == null) continue;
 
-                if(a instanceof Method) {
+                if (a instanceof Method) {
                     ast.addFunction(a);
                     continue;
                 }
 
-                var res = a.interpret(ast, table); // remove this part
-                if(res instanceof CompError) {
-                    semanticErrosConsole += res.toString() + "\n";
+                if (a instanceof StructDeclaration) {
+                    // TODO: add structs declarations
                 }
+
 
             }
 
             // second ast loop, declarations and assignments
+            for (var a : ast.getInstructions()) {
+                if (a instanceof Declaration) {
+                    // TODO: check arr declarations
+                    var res = a.interpret(ast, table);
+                    if (res instanceof CompError) {
+                        semanticErrosConsole += res.toString() + "\n";
+                    }
+                }
+            }
 
             // third ast loop, interpret main
+            for (var a: ast.getInstructions()) {
+                if(a instanceof RunMain) {
+                    var res = a.interpret(ast, table);
+                    if(res instanceof CompError) {
+                        semanticErrosConsole += res.toString() + "\n";
+                    }
+                }
+            }
 
-            for (var e: ast.getErrors()) {
+            for (var e : ast.getErrors()) {
                 semanticErrosConsole += e.toString() + "\n";
             }
 

@@ -3,6 +3,7 @@ package org.example.compscript.parser.analisys;
 
 import java_cup.runtime.*;
 import java.util.LinkedList;
+import java.util.HashMap;
 import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.symbol.*;
 
@@ -38,6 +39,7 @@ import org.example.compscript.parser.instructions.structs.StructValue;
 import org.example.compscript.parser.instructions.structs.StructAccess;
 import org.example.compscript.parser.instructions.structs.StructAssignment;
 import org.example.compscript.parser.instructions.funcs.Method;
+import org.example.compscript.parser.instructions.funcs.RunMain;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -90,15 +92,19 @@ terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW, VOID_RW, LIST, PUSH, GE
 terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
 terminal EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
 terminal OR, AND, NOT;
+terminal RUN_MAIN;
 
 // Non-terminals
 nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES, ARRAY_DATA, STRUCT_TYPES_LIST, STRUCT_VALUES_LIST;
 nonterminal LinkedList<LinkedList<Instruction>> ARRAY2D_DATA;
 nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT, IF_SENTENCE, MATCH_SENTENCE, CASE, STRUCT_INST;
-nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS, CONTINUES, LIST_INST, METHOD;
+nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS, CONTINUES, LIST_INST;
+nonterminal Instruction METHOD, RUN_MAIN_INS;
 nonterminal Instruction EXPRESSION;
 nonterminal Type TYPE_RW;
 nonterminal String MUTABILITY, COUNTER;
+nonterminal LinkedList<HashMap> PARAMSCALL, PARAMS;
+nonterminal HashMap <String, Object> PARAM;
 
 // precedences
 precedence left OR;
@@ -135,9 +141,50 @@ INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
             | CONTINUES:a END {: RESULT = a; :}
             | LIST_INST:a END {: RESULT = a; :}
             | STRUCT_INST:a END {: RESULT = a; :}
-            | METHOD:a END {: RESULT = a; :}
+            | METHOD:a {: RESULT = a; :}
+            | RUN_MAIN_INS:a END {: RESULT = a; :}
             | error END {: RESULT = null; :}
             | error {: RESULT = null; :}
+;
+
+RUN_MAIN_INS ::= RUN_MAIN ID:a PAR_START PAR_END {: RESULT = new RunMain(a, null, aleft, aright); :}
+                | RUN_MAIN ID:a PAR_START PARAMSCALL:b PAR_END {: RESULT = new RunMain(a, b, aleft, aright); :}
+;
+
+PARAMSCALL ::= PARAMSCALL:a COMMA ID:b EQUALS EXPRESSION:c {:
+                                                                var hm2 = new HashMap<String, Object>();
+                                                                hm2.put("id", b);
+                                                                hm2.put("exp", c);
+                                                                RESULT = a;
+                                                                RESULT.add(hm2);
+                                                            :}
+            | ID:a EQUALS EXPRESSION:b {:
+                                            var hm = new HashMap<String, Object>();
+                                            hm.put("id", a);
+                                            hm.put("exp", b);
+                                            RESULT = new LinkedList<HashMap>();
+                                            RESULT.add(hm);
+                                        :}
+;
+
+PARAMS ::= PARAMS:a COMMA PARAM:b {: RESULT = a; RESULT.add(b); :}
+        | PARAM:a {: RESULT = new LinkedList<HashMap>(); RESULT.add(a); :}
+;
+
+PARAM ::= TYPE_RW:a COLON ID:b EQUALS EXPRESSION:c {:
+                                                var hm2 = new HashMap<String, Object>();
+                                                hm2.put("type", a);
+                                                hm2.put("id", b);
+                                                hm2.put("exp", c);
+                                                RESULT = hm2;
+                                            :}
+        | TYPE_RW:a COLON ID:b {:
+                            var hm = new HashMap<String, Object>();
+                            hm.put("type", a);
+                            hm.put("id", b);
+                            hm.put("exp", null);
+                            RESULT = hm;
+                       :}
 ;
 
 STRUCT_INST ::= STRUCT ID:a BRA_START STRUCT_TYPES_LIST:b BRA_END {: RESULT = new StructDeclaration(a, b, aleft, aright); :}
@@ -169,7 +216,8 @@ TYPE_RW ::= INT_RW {: RESULT = new Type(dataType.WHOLE); :}
          | VOID_RW {: RESULT = new Type(dataType.VOID); :}
 ;
 
-METHOD ::= TYPE_RW:a ID:b PAR_START PAR_END BRA_START INSTRUCTIONS:c BRA_END {: RESULT = new Method(a, b, c, aleft, aright); :}
+METHOD ::= TYPE_RW:a ID:b PAR_START PAR_END BRA_START INSTRUCTIONS:c BRA_END {: RESULT = new Method(a, b, null, c, aleft, aright); :}
+        | TYPE_RW:a ID:b PAR_START PARAMS:c PAR_END BRA_START INSTRUCTIONS:d BRA_END {: RESULT = new Method(a, b, c, d, aleft, aright); :}
 ;
 
 ARRAY_DATA ::= ARRAY_DATA:a COMMA EXPRESSION:b {: RESULT = a; RESULT.add(b); :}
