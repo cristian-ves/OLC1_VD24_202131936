@@ -5,7 +5,8 @@ public enum STableType {
     MAIN("main"),
     LOOP("loop"),
     IF("if"),
-    MATCH("match"),;
+    MATCH("match"),
+    METHOD("method");
 
     private final String value;
 

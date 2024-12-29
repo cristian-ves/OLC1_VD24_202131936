@@ -79,6 +79,15 @@ public class SymbolsTable {
 
     }
 
+    public Symbol_ getVariablePrevTable(String id) {
+        for(SymbolsTable i = this.prevTable; i != null; i = i.getPrevTable()){
+            Symbol_ searchedSymbol = (Symbol_) i.currentTable.get(id.toLowerCase());
+            if (searchedSymbol != null) return searchedSymbol;
+        }
+
+        return null;
+    }
+
     public int putVariable (String id, Symbol_ symbol) {
         Symbol_ searchedSymbol = getVariable(id);
 

@@ -19,7 +19,7 @@ public class Method extends Instruction {
         super(type, line, column);
         this.id = id;
         this.instructions = instructions;
-        this.parameters = parameters;
+        this.parameters = parameters == null ? new LinkedList<>() : parameters;
     }
 
     @Override

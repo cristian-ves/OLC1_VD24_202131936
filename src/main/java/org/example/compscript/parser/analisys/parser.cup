@@ -40,6 +40,7 @@ import org.example.compscript.parser.instructions.structs.StructAccess;
 import org.example.compscript.parser.instructions.structs.StructAssignment;
 import org.example.compscript.parser.instructions.funcs.Method;
 import org.example.compscript.parser.instructions.funcs.RunMain;
+import org.example.compscript.parser.instructions.funcs.Call;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -99,7 +100,7 @@ nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES, ARRAY_DATA, STRUCT_T
 nonterminal LinkedList<LinkedList<Instruction>> ARRAY2D_DATA;
 nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT, IF_SENTENCE, MATCH_SENTENCE, CASE, STRUCT_INST;
 nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS, CONTINUES, LIST_INST;
-nonterminal Instruction METHOD, RUN_MAIN_INS;
+nonterminal Instruction METHOD, RUN_MAIN_INS, CALL;
 nonterminal Instruction EXPRESSION;
 nonterminal Type TYPE_RW;
 nonterminal String MUTABILITY, COUNTER;
@@ -143,8 +144,13 @@ INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
             | STRUCT_INST:a END {: RESULT = a; :}
             | METHOD:a {: RESULT = a; :}
             | RUN_MAIN_INS:a END {: RESULT = a; :}
+            | CALL:a END {: RESULT = a; :}
             | error END {: RESULT = null; :}
             | error {: RESULT = null; :}
+;
+
+CALL ::= ID:a PAR_START PAR_END {: RESULT = new Call(a, null, aleft, aright); :}
+        | ID:a PAR_START PARAMSCALL:b PAR_END {: RESULT = new Call(a, b, aleft, aright); :}
 ;
 
 RUN_MAIN_INS ::= RUN_MAIN ID:a PAR_START PAR_END {: RESULT = new RunMain(a, null, aleft, aright); :}

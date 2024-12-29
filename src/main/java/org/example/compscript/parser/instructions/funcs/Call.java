@@ -8,31 +8,31 @@ import org.example.compscript.parser.symbol.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class RunMain extends Instruction {
+public class Call extends Instruction {
 
-    private String id;
-    private LinkedList<HashMap> parameters;
+    private String funcId;
+    private LinkedList<HashMap> arguments;
 
-    public RunMain(String id, LinkedList<HashMap> parameters, int line, int column) {
+    public Call(String funcId, LinkedList<HashMap> arguments, int line, int column) {
         super(new Type(dataType.VOID), line, column);
-        this.id = id;
-        this.parameters = parameters == null ? new LinkedList<>() : parameters;
+        this.funcId = funcId;
+        this.arguments = arguments == null ? new LinkedList<>() : arguments;
     }
 
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
-        var search = tree.getFunction(id);
+        var search = tree.getFunction(funcId);
         if (search == null)
             return new CompError(
                     ErrorType.SEMANTIC,
-                    "The function " + id + " hasn't been declared yet.",
+                    "The function " + funcId + " hasn't been declared yet.",
                     line,
                     column
             );
 
         if (search instanceof Method method) {
 
-            var newTable = new SymbolsTable(tree.getGlobalTable(), STableType.METHOD);
+            var newTable = new SymbolsTable(symbolsTable, STableType.METHOD);
 
             for (int i = 0; i < method.parameters.size(); i++) {
                 var id = (String) method.parameters.get(i).get("id");
@@ -64,8 +64,8 @@ public class RunMain extends Instruction {
 
             }
 
-            for (int i = 0; i < parameters.size(); i++) {
-                String parameterId = (String) parameters.get(i).get("id");
+            for (int i = 0; i < arguments.size(); i++) {
+                String parameterId = (String) arguments.get(i).get("id");
                 var variable = newTable.getVariable(parameterId);
                 if(variable == null)
                     return new CompError(
@@ -75,7 +75,7 @@ public class RunMain extends Instruction {
                             column
                     );
 
-                var value = (Instruction) parameters.get(i).get("exp");
+                var value = (Instruction) arguments.get(i).get("exp");
                 var valueRes = value.interpret(tree, symbolsTable);
                 if(valueRes instanceof CompError) return valueRes;
 
@@ -109,14 +109,13 @@ public class RunMain extends Instruction {
                     );
             }
 
-
             var res = method.interpret(tree, newTable);
             if (res instanceof CompError) return (CompError) res;
+
+            //TODO: return expression
         }
 
         return null;
-
-
 
     }
 }
