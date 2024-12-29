@@ -41,6 +41,7 @@ import org.example.compscript.parser.instructions.structs.StructAssignment;
 import org.example.compscript.parser.instructions.funcs.Method;
 import org.example.compscript.parser.instructions.funcs.RunMain;
 import org.example.compscript.parser.instructions.funcs.Call;
+import org.example.compscript.parser.instructions.funcs.Return;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -87,7 +88,7 @@ action code {:
 
 // Terminals
 terminal String WHOLE, STRING, DOUBLE, BOOLEAN, CHAR, ID;
-terminal IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE;
+terminal IF, ELSE, MATCH, DEFAULT, WHILE, FOR, DO, BREAK, CONTINUE, RETURN;
 terminal END, COLON, CONSOLE, DOT, LOG, CAST, AS, CONST, LET, BRA_START, BRA_END, SBRA_START, SBRA_END, COMMA;
 terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW, VOID_RW, LIST, PUSH, GET, SET, REMOVE, POP, REVERSE, STRUCT;
 terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
@@ -99,7 +100,7 @@ terminal RUN_MAIN;
 nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES, ARRAY_DATA, STRUCT_TYPES_LIST, STRUCT_VALUES_LIST;
 nonterminal LinkedList<LinkedList<Instruction>> ARRAY2D_DATA;
 nonterminal Instruction INSTRUCTION, PRINT, DECLARATION, ASSIGNMENT, INCREMENT_DECREMENT, IF_SENTENCE, MATCH_SENTENCE, CASE, STRUCT_INST;
-nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS, CONTINUES, LIST_INST;
+nonterminal Instruction LOOP_FOR, STEP_FOR, LOOP_WHILE, LOOP_DO, BREAKS, CONTINUES, LIST_INST, RETURN_INS;
 nonterminal Instruction METHOD, RUN_MAIN_INS, CALL;
 nonterminal Instruction EXPRESSION;
 nonterminal Type TYPE_RW;
@@ -144,13 +145,18 @@ INSTRUCTION ::= PRINT:a END {: RESULT = a; :}
             | STRUCT_INST:a END {: RESULT = a; :}
             | METHOD:a {: RESULT = a; :}
             | RUN_MAIN_INS:a END {: RESULT = a; :}
+            | RETURN_INS:a END {: RESULT = a; :}
             | CALL:a END {: RESULT = a; :}
             | error END {: RESULT = null; :}
             | error {: RESULT = null; :}
 ;
 
-CALL ::= ID:a PAR_START PAR_END {: RESULT = new Call(a, null, aleft, aright); :}
-        | ID:a PAR_START PARAMSCALL:b PAR_END {: RESULT = new Call(a, b, aleft, aright); :}
+RETURN_INS ::= RETURN:a {: RESULT = new Return(null, aleft, aright); :}
+            | RETURN:a EXPRESSION:b {: RESULT = new Return(b, aleft, aright); :}
+;
+
+CALL ::= ID:a PAR_START PAR_END {: RESULT = new Call(a, null, false, aleft, aright); :}
+        | ID:a PAR_START PARAMSCALL:b PAR_END {: RESULT = new Call(a, b, false, aleft, aright); :}
 ;
 
 RUN_MAIN_INS ::= RUN_MAIN ID:a PAR_START PAR_END {: RESULT = new RunMain(a, null, aleft, aright); :}
@@ -177,14 +183,14 @@ PARAMS ::= PARAMS:a COMMA PARAM:b {: RESULT = a; RESULT.add(b); :}
         | PARAM:a {: RESULT = new LinkedList<HashMap>(); RESULT.add(a); :}
 ;
 
-PARAM ::= TYPE_RW:a COLON ID:b EQUALS EXPRESSION:c {:
+PARAM ::= ID:b COLON TYPE_RW:a EQUALS EXPRESSION:c {:
                                                 var hm2 = new HashMap<String, Object>();
                                                 hm2.put("type", a);
                                                 hm2.put("id", b);
                                                 hm2.put("exp", c);
                                                 RESULT = hm2;
                                             :}
-        | TYPE_RW:a COLON ID:b {:
+        | ID:b COLON TYPE_RW:a {:
                             var hm = new HashMap<String, Object>();
                             hm.put("type", a);
                             hm.put("id", b);
@@ -324,5 +330,7 @@ EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, arig
             | ID:a DOT REMOVE PAR_START EXPRESSION:b PAR_END {: RESULT = new Remove(b, a, aleft, aright); :}
             | ID:a DOT POP PAR_START PAR_END {: RESULT = new Pop(a, aleft, aright); :}
             | ID:a DOT ID:b {: RESULT = new StructAccess(a, b, aleft, aright); :}
+            | ID:a PAR_START PAR_END {: RESULT = new Call(a, null, true, aleft, aright); :}
+            | ID:a PAR_START PARAMSCALL:b PAR_END {: RESULT = new Call(a, b, true, aleft, aright); :}
             | PAR_START EXPRESSION:a PAR_END {: RESULT = a; :}
 ;

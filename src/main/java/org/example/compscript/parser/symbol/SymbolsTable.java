@@ -1,5 +1,7 @@
 package org.example.compscript.parser.symbol;
 
+import org.example.compscript.parser.abstract_.Instruction;
+
 import java.util.HashMap;
 
 public class SymbolsTable {
@@ -9,6 +11,8 @@ public class SymbolsTable {
     private STableType type;
     private boolean isBroken;
     private boolean isUncontinued;
+    private boolean isReturned;
+    private Instruction expReturned;
 
     public SymbolsTable(STableType type) {
         this.currentTable = new HashMap<>();
@@ -35,6 +39,14 @@ public class SymbolsTable {
         return type;
     }
 
+    public boolean isReturned() {
+        return isReturned;
+    }
+
+    public Instruction getExpReturned() {
+        return expReturned;
+    }
+
     public HashMap<String, Symbol_> getCurrentTable() {
         return currentTable;
     }
@@ -51,8 +63,16 @@ public class SymbolsTable {
         isBroken = broken;
     }
 
+    public void setReturned(boolean returned) {
+        isReturned = returned;
+    }
+
     public void setUncontinued(boolean uncontinued) {
         isUncontinued = uncontinued;
+    }
+
+    public void setExpReturned(Instruction expReturned) {
+        this.expReturned = expReturned;
     }
 
     public boolean setVariable (Symbol_ symbol) {
@@ -77,6 +97,11 @@ public class SymbolsTable {
 
         return null;
 
+    }
+
+    public Symbol_ getVariableInThisEnv(String id) {
+        Symbol_ searchedSymbol = (Symbol_) this.currentTable.get(id.toLowerCase());
+        return searchedSymbol;
     }
 
     public Symbol_ getVariablePrevTable(String id) {

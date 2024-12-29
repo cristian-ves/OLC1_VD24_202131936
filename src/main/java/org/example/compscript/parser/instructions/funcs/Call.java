@@ -12,11 +12,13 @@ public class Call extends Instruction {
 
     private String funcId;
     private LinkedList<HashMap> arguments;
+    private boolean isExpression;
 
-    public Call(String funcId, LinkedList<HashMap> arguments, int line, int column) {
+    public Call(String funcId, LinkedList<HashMap> arguments, boolean isExpression, int line, int column) {
         super(new Type(dataType.VOID), line, column);
         this.funcId = funcId;
         this.arguments = arguments == null ? new LinkedList<>() : arguments;
+        this.isExpression = isExpression;
     }
 
     @Override
@@ -30,90 +32,102 @@ public class Call extends Instruction {
                     column
             );
 
-        if (search instanceof Method method) {
+        Method method = (Method) search;
 
-            var newTable = new SymbolsTable(symbolsTable, STableType.METHOD);
+        var newTable = new SymbolsTable(symbolsTable, STableType.METHOD);
 
-            for (int i = 0; i < method.parameters.size(); i++) {
-                var id = (String) method.parameters.get(i).get("id");
-                var type = (Type) method.parameters.get(i).get("type");
-                var exp = (Instruction) method.parameters.get(i).get("exp");
+        for (int i = 0; i < method.parameters.size(); i++) {
+            var id = (String) method.parameters.get(i).get("id");
+            var type = (Type) method.parameters.get(i).get("type");
+            var exp = (Instruction) method.parameters.get(i).get("exp");
 
-                Object valExp = null;
+            Object valExp = null;
 
-                if (exp != null) { // expression validation
-                    valExp = exp.interpret(tree, symbolsTable);
-                    if (valExp instanceof CompError) return valExp;
-                    if (type.getType() != exp.type.getType())
-                        return new CompError(
-                                ErrorType.SEMANTIC,
-                                "Parameter types not matching: provided: " + exp.type.getType().getValue() + ", required: " + type.getType().getValue(),
-                                line,
-                                column
-                        );
-                }
-
-                if (!newTable.setVariable(new Symbol_(type, id, valExp))) {
+            if (exp != null) { // expression validation
+                valExp = exp.interpret(tree, symbolsTable);
+                if (valExp instanceof CompError) return valExp;
+                if (type.getType() != exp.type.getType())
                     return new CompError(
                             ErrorType.SEMANTIC,
-                            "This variable already exists in the environment.",
-                            line,
-                            column
-                    );
-                }
-
-            }
-
-            for (int i = 0; i < arguments.size(); i++) {
-                String parameterId = (String) arguments.get(i).get("id");
-                var variable = newTable.getVariable(parameterId);
-                if(variable == null)
-                    return new CompError(
-                            ErrorType.SEMANTIC,
-                            "The parameter " + parameterId + " doesn't exist.",
-                            line,
-                            column
-                    );
-
-                var value = (Instruction) arguments.get(i).get("exp");
-                var valueRes = value.interpret(tree, symbolsTable);
-                if(valueRes instanceof CompError) return valueRes;
-
-                if(value.type.getType() != variable.getType().getType())
-                    return new CompError(
-                            ErrorType.SEMANTIC,
-                            "argument type not matching: provided: " + value.type.getType().getValue() + ", required: " + variable.getType().getType().getValue(),
-                            line,
-                            column
-                    );
-                variable.setValue(valueRes);
-            }
-
-            for(int i = 0; i < method.parameters.size(); i++) {
-                var id = (String) method.parameters.get(i).get("id");
-                var res = newTable.getVariable(id);
-                if(res == null)
-                    return new CompError(
-                            ErrorType.SEMANTIC,
-                            "Parameter " + id + " not declared.",
-                            line,
-                            column
-                    );
-
-                if(res.getValue() == null)
-                    return new CompError(
-                            ErrorType.SEMANTIC,
-                            "Parameter " + res.getId() + " doesn't have a value declared.",
+                            "Parameter types not matching: provided: " + exp.type.getType().getValue() + ", required: " + type.getType().getValue(),
                             line,
                             column
                     );
             }
 
-            var res = method.interpret(tree, newTable);
-            if (res instanceof CompError) return (CompError) res;
+            if (!newTable.setVariable(new Symbol_(type, id, valExp))) {
+                return new CompError(
+                        ErrorType.SEMANTIC,
+                        "This variable already exists in the environment.",
+                        line,
+                        column
+                );
+            }
 
-            //TODO: return expression
         }
+
+        for (int i = 0; i < arguments.size(); i++) {
+            String parameterId = (String) arguments.get(i).get("id");
+            var variable = newTable.getVariableInThisEnv(parameterId);
+            if (variable == null)
+                return new CompError(
+                        ErrorType.SEMANTIC,
+                        "The parameter " + parameterId + " doesn't exist.",
+                        line,
+                        column
+                );
+
+            var value = (Instruction) arguments.get(i).get("exp");
+            var valueRes = value.interpret(tree, symbolsTable);
+            if (valueRes instanceof CompError) return valueRes;
+
+            if (value.type.getType() != variable.getType().getType())
+                return new CompError(
+                        ErrorType.SEMANTIC,
+                        "argument type not matching: provided: " + value.type.getType().getValue() + ", required: " + variable.getType().getType().getValue(),
+                        line,
+                        column
+                );
+            variable.setValue(valueRes);
+        }
+
+        for (int i = 0; i < method.parameters.size(); i++) {
+            var id = (String) method.parameters.get(i).get("id");
+            var res = newTable.getVariable(id);
+            if (res == null)
+                return new CompError(
+                        ErrorType.SEMANTIC,
+                        "Parameter " + id + " not declared.",
+                        line,
+                        column
+                );
+
+            if (res.getValue() == null)
+                return new CompError(
+                        ErrorType.SEMANTIC,
+                        "Parameter " + res.getId() + " doesn't have a value declared.",
+                        line,
+                        column
+                );
+        }
+
+        var res = method.interpret(tree, newTable);
+        if (res instanceof CompError) return (CompError) res;
+
+        if (res != null) {
+            LinkedList<Object> values = (LinkedList<Object>) res;
+            type = (Type) values.get(1);
+            return (Object) values.get(0);
+
+        }
+
+        if(isExpression)
+            return new CompError(
+                    ErrorType.SEMANTIC,
+                    "A method is not an expression.",
+                    line,
+                    column
+            );
 
         return null;
 

@@ -35,6 +35,9 @@ digit = [0-9]
 <YYINITIAL> {
 
     //Reserved words
+    "return" {
+        return new Symbol(sym.RETURN, yyline, yycolumn, yytext());
+    }
     "run_main" {
         return new Symbol(sym.RUN_MAIN, yyline, yycolumn, yytext());
     }

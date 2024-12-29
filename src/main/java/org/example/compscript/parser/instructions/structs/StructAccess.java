@@ -34,8 +34,8 @@ public class StructAccess extends Instruction {
             return new CompError(
                     ErrorType.SEMANTIC,
                     structId + " is not a struct instance",
-                    column,
-                    line
+                    line,
+                    column
             );
 
         StructInstance instance = (StructInstance) structSymbol.getValue();
