@@ -9,8 +9,6 @@ import java.util.LinkedList;
 
 public class If extends Instruction {
 
-    //TODO: IFS ANIDADOS
-
     private Instruction condition;
     private LinkedList<Instruction> instructions;
     private Instruction elseCondition;
