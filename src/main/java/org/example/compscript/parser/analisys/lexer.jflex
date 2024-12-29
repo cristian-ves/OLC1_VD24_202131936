@@ -35,6 +35,9 @@ digit = [0-9]
 <YYINITIAL> {
 
     //Reserved words
+    "round" {
+        return new Symbol(sym.ROUND, yyline, yycolumn, yytext());
+    }
     "return" {
         return new Symbol(sym.RETURN, yyline, yycolumn, yytext());
     }

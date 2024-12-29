@@ -42,6 +42,7 @@ import org.example.compscript.parser.instructions.funcs.Method;
 import org.example.compscript.parser.instructions.funcs.RunMain;
 import org.example.compscript.parser.instructions.funcs.Call;
 import org.example.compscript.parser.instructions.funcs.Return;
+import org.example.compscript.parser.instructions.funcs.Round;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -94,7 +95,7 @@ terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW, VOID_RW, LIST, PUSH, GE
 terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
 terminal EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
 terminal OR, AND, NOT;
-terminal RUN_MAIN;
+terminal RUN_MAIN, ROUND;
 
 // Non-terminals
 nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES, ARRAY_DATA, STRUCT_TYPES_LIST, STRUCT_VALUES_LIST;
@@ -332,5 +333,6 @@ EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, arig
             | ID:a DOT ID:b {: RESULT = new StructAccess(a, b, aleft, aright); :}
             | ID:a PAR_START PAR_END {: RESULT = new Call(a, null, true, aleft, aright); :}
             | ID:a PAR_START PARAMSCALL:b PAR_END {: RESULT = new Call(a, b, true, aleft, aright); :}
+            | ROUND:a PAR_START EXPRESSION:b PAR_END {: RESULT = new Round(b, aleft, aright); :}
             | PAR_START EXPRESSION:a PAR_END {: RESULT = a; :}
 ;

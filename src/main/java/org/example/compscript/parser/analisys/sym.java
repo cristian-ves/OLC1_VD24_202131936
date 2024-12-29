@@ -71,6 +71,7 @@ public class sym {
   public static final int LESS_THAN = 59;
   public static final int STRING_RW = 36;
   public static final int MULTIPLICATION = 52;
+  public static final int ROUND = 67;
   public static final int DO = 14;
   public static final int CONSOLE = 20;
   public static final int SET = 41;
@@ -142,7 +143,8 @@ public class sym {
   "OR",
   "AND",
   "NOT",
-  "RUN_MAIN"
+  "RUN_MAIN",
+  "ROUND"
   };
 }
 
