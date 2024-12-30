@@ -16,6 +16,7 @@ import org.example.compscript.parser.instructions.declarations.ArrayDeclaration;
 import org.example.compscript.parser.instructions.declarations.Declaration;
 import org.example.compscript.parser.instructions.funcs.Method;
 import org.example.compscript.parser.instructions.funcs.RunMain;
+import org.example.compscript.parser.instructions.lists.ListDeclaration;
 import org.example.compscript.parser.instructions.structs.StructDeclaration;
 import org.example.compscript.parser.symbol.STableType;
 import org.example.compscript.parser.symbol.Tree;
@@ -104,8 +105,14 @@ public class Main extends Application {
 
                 if (a instanceof StructDeclaration) {
                     var res = a.interpret(ast, table);
+                    if(res instanceof CompError e) ast.addError(e);
+                    continue;
                 }
 
+                if (a instanceof ListDeclaration) {
+                    var res = a.interpret(ast, table);
+                    if(res instanceof CompError e) ast.addError(e);
+                }
 
             }
 

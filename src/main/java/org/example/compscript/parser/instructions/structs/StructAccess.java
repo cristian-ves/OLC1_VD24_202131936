@@ -12,6 +12,7 @@ public class StructAccess extends Instruction {
 
     private String structId;
     private String fieldId;
+    private String secondField;
 
     public StructAccess(String structId, String fieldId, int line, int column) {
         super(new Type(dataType.VOID), line, column);
@@ -19,8 +20,16 @@ public class StructAccess extends Instruction {
         this.fieldId = fieldId;
     }
 
+    public StructAccess(String structId, String fieldId, String secondField, int line, int column) {
+        super(new Type(dataType.VOID), line, column);
+        this.structId = structId;
+        this.fieldId = fieldId;
+        this.secondField = secondField;
+    }
+
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
+
         Symbol_ structSymbol = symbolsTable.getVariable(structId);
         if (structSymbol == null)
             return new CompError(
@@ -49,6 +58,10 @@ public class StructAccess extends Instruction {
                     line,
                     column
             );
+
+        if(secondField != null) {
+            System.out.println("hjsd");
+        }
 
         this.type.setType(((Type) fieldProps.get(1)).getType());
 

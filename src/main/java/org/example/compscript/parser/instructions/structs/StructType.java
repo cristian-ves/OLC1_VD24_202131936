@@ -6,10 +6,17 @@ public class StructType {
 
     private String id;
     private Type type;
+    private String subStructId;
 
     public StructType(String id, Type type) {
         this.id = id;
         this.type = type;
+    }
+
+    public StructType(String id, Type type, String subStructId) {
+        this.id = id;
+        this.type = type;
+        this.subStructId = subStructId;
     }
 
     public String getId() {

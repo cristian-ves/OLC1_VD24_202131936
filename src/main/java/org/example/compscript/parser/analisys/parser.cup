@@ -205,8 +205,10 @@ PARAM ::= ID:b COLON TYPE_RW:a EQUALS EXPRESSION:c {:
 STRUCT_INST ::= STRUCT ID:a BRA_START STRUCT_TYPES_LIST:b BRA_END {: RESULT = new StructDeclaration(a, b, aleft, aright); :}
 ;
 
-STRUCT_TYPES_LIST ::= STRUCT_TYPES_LIST:a ID:b COLON TYPE_RW:c END {: RESULT = a; RESULT.add(new StructTypeIns(b, c, bleft, bright)); :}
+STRUCT_TYPES_LIST ::= STRUCT_TYPES_LIST:a ID:b COLON TYPE_RW:c END {: RESULT = a; RESULT.add(new StructTypeIns(b, c, aleft, aright)); :}
             | ID:a COLON TYPE_RW:b END {: RESULT = new LinkedList<Instruction>(); RESULT.add(new StructTypeIns(a, b, aleft, aright)); :}
+            | STRUCT_TYPES_LIST:a ID:b COLON ID:c END {: RESULT = a; RESULT.add(new StructTypeIns(b, c, aleft, aright)); :}
+            | ID:a COLON ID:b END {: RESULT = new LinkedList<Instruction>(); RESULT.add(new StructTypeIns(a, b, aleft, aright)); :}
 ;
 
 LIST_INST ::= ID:a DOT PUSH PAR_START EXPRESSION:b PAR_END {: RESULT = new Push(a, b, aleft, aright); :}
@@ -334,6 +336,7 @@ EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, arig
             | ID:a DOT REMOVE PAR_START EXPRESSION:b PAR_END {: RESULT = new Remove(b, a, aleft, aright); :}
             | ID:a DOT POP PAR_START PAR_END {: RESULT = new Pop(a, aleft, aright); :}
             | ID:a DOT ID:b {: RESULT = new StructAccess(a, b, aleft, aright); :}
+            | ID:a DOT ID:b DOT ID:c {: RESULT = new StructAccess(a, b, c, aleft, aright); :}
             | ID:a PAR_START PAR_END {: RESULT = new Call(a, null, true, aleft, aright); :}
             | ID:a PAR_START PARAMSCALL:b PAR_END {: RESULT = new Call(a, b, true, aleft, aright); :}
             | ROUND:a PAR_START EXPRESSION:b PAR_END {: RESULT = new Round(b, aleft, aright); :}
