@@ -33,4 +33,8 @@ public class StructDeclaration extends Instruction {
         return null;
 
     }
+
+    public String getId() {
+        return id;
+    }
 }

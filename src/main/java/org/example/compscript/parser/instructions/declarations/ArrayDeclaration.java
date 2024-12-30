@@ -16,6 +16,7 @@ public class ArrayDeclaration extends Instruction {
     private LinkedList<Object> value;
     private boolean isMutable;
     private LinkedList<Instruction> expressions;
+    private Instruction instruction;
 
     public ArrayDeclaration(String isMutable, String id, Type type, LinkedList<Instruction> expressions, int line, int column) { //arrays
         super(type, line, column);
@@ -25,8 +26,17 @@ public class ArrayDeclaration extends Instruction {
         this.value = new LinkedList<Object>();
     }
 
+    public ArrayDeclaration(String isMutable, String id, Type type, Instruction instruction, int line, int column) { //arrays
+        super(type, line, column);
+        this.isMutable = Boolean.parseBoolean(isMutable);
+        this.id = id;
+        this.instruction = instruction;
+        this.value = new LinkedList<Object>();
+    }
+
     @Override
     public Object interpret(Tree tree, SymbolsTable symbolsTable) {
+
         boolean idNotUsed = symbolsTable.setVariable(new Symbol_(this.type, this.id, value, this.isMutable));
 
         if (!idNotUsed) return new
@@ -36,6 +46,19 @@ public class ArrayDeclaration extends Instruction {
                 this.line,
                 this.column
         );
+
+        if (instruction != null) {
+            var resIns = instruction.interpret(tree, symbolsTable);
+            if (resIns instanceof CompError) return resIns;
+            if (resIns instanceof LinkedList list) {
+                value = list;
+                return null;
+            } else {
+                return new CompError(ErrorType.SEMANTIC,
+                        "Invalid array declaration", this.line, this.column);
+            }
+
+        }
 
         for (Instruction ins : expressions) {
             var interpretedIns = ins.interpret(tree, symbolsTable);

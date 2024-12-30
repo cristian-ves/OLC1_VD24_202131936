@@ -44,6 +44,7 @@ import org.example.compscript.parser.instructions.funcs.Call;
 import org.example.compscript.parser.instructions.funcs.Return;
 import org.example.compscript.parser.instructions.funcs.Round;
 import org.example.compscript.parser.instructions.funcs.Length;
+import org.example.compscript.parser.instructions.funcs.ToString;
 
 // Expressions
 import org.example.compscript.parser.expresions.Native;
@@ -96,7 +97,7 @@ terminal INT_RW, DOUBLE_RW, CHAR_RW, BOOL_RW, STRING_RW, VOID_RW, LIST, PUSH, GE
 terminal PAR_START, PAR_END, PLUS, MINUS, UMINUS, EQUALS, MULTIPLICATION, DIVISION, POWER, ROOT, MODULO;
 terminal EQUALS_TO, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_EQUAL_THAN, GREATER_EQUAL_THAN;
 terminal OR, AND, NOT;
-terminal RUN_MAIN, ROUND, LENGTH;
+terminal RUN_MAIN, ROUND, LENGTH, TOSTRING;
 
 // Non-terminals
 nonterminal LinkedList<Instruction> S, INSTRUCTIONS, CASES, ARRAY_DATA, STRUCT_TYPES_LIST, STRUCT_VALUES_LIST;
@@ -246,6 +247,7 @@ DECLARATION ::= MUTABILITY:a ID:b COLON TYPE_RW:c EQUALS EXPRESSION:d {: RESULT 
             | MUTABILITY:a ID:b COLON TYPE_RW:c {: RESULT = new Declaration(a, b, c, aleft, aright); :}
             | MUTABILITY:a ID:b COLON LIST LESS_THAN TYPE_RW:c GREATER_THAN {: RESULT = new ListDeclaration(a, b, c, aleft, aright); :}
             | MUTABILITY:a ID:b COLON TYPE_RW:c SBRA_START SBRA_END EQUALS SBRA_START ARRAY_DATA:d SBRA_END {: RESULT = new ArrayDeclaration(a, b, c, d, aleft, aright); :}
+            | MUTABILITY:a ID:b COLON TYPE_RW:c SBRA_START SBRA_END EQUALS EXPRESSION:d {: RESULT = new ArrayDeclaration(a, b, c, d, aleft, aright); :}
             | MUTABILITY:a ID:b COLON TYPE_RW:c SBRA_START SBRA_END SBRA_START SBRA_END EQUALS SBRA_START ARRAY2D_DATA:d SBRA_END {: RESULT = new Array2DDeclaration(a, b, c, d, aleft, aright); :}
             | MUTABILITY:a ID:b COLON ID:c EQUALS BRA_START STRUCT_VALUES_LIST:d BRA_END {: RESULT = new StructInstanceIns(a, b, c, d, aleft, aright); :}
             | ID:a DOT ID:b EQUALS EXPRESSION:c {: RESULT = new StructAssignment(a, b, c, aleft, aright); :}
@@ -336,5 +338,6 @@ EXPRESSION ::= MINUS EXPRESSION:a {: RESULT = new UnitaryNegation(a, aleft, arig
             | ID:a PAR_START PARAMSCALL:b PAR_END {: RESULT = new Call(a, b, true, aleft, aright); :}
             | ROUND:a PAR_START EXPRESSION:b PAR_END {: RESULT = new Round(b, aleft, aright); :}
             | LENGTH:a PAR_START EXPRESSION:b PAR_END {: RESULT = new Length(b, aleft, aright); :}
+            | TOSTRING:a PAR_START EXPRESSION:b PAR_END {: RESULT = new ToString(b, aleft, aright); :}
             | PAR_START EXPRESSION:a PAR_END {: RESULT = a; :}
 ;

@@ -51,6 +51,7 @@ public class Main extends Application {
 
         console = new Output();
         console.createCodeArea(root);
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 
         ctrl.setCodeArea(codeArea);
         ctrl.setConsole(console);
@@ -102,7 +103,7 @@ public class Main extends Application {
                 }
 
                 if (a instanceof StructDeclaration) {
-                    // TODO: add structs declarations
+                    var res = a.interpret(ast, table);
                 }
 
 

@@ -35,6 +35,9 @@ digit = [0-9]
 <YYINITIAL> {
 
     //Reserved words
+    "toString" {
+        return new Symbol(sym.TOSTRING, yyline, yycolumn, yytext());
+    }
     "length" {
         return new Symbol(sym.LENGTH, yyline, yycolumn, yytext());
     }

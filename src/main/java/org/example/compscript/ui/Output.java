@@ -4,32 +4,36 @@ import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.richtext.model.StyleSpans;
+import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.Collections;
 
 public class Output extends CodeArea {
 
     public Output () {
-        setStyle("-fx-font-size: 16px; -fx-font-family: 'Courier New'; -fx-font-size: 14px;");
+        this.setStyle("-fx-background-color: #2b2b2b;");
+        this.setParagraphGraphicFactory(LineNumberFactory.get(this));
+        this.textProperty().addListener((obs, oldText, newText) -> {
+            this.setStyleSpans(0, computeWhiteStyle(newText));
+        });
         setEditable(false);
+    }
+
+    private StyleSpans<Collection<String>> computeWhiteStyle(String text) {
+        StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
+        spansBuilder.add(Collections.singleton("white-text"), text.length());
+        return spansBuilder.create();
     }
 
     public void showOutput(String text) {
         clear();
         appendText(text);
-        applyColorToText(text, Color.WHITE);
     }
 
-    private void applyColorToText(String text, Color color) {
-        setStyle(getLength() - text.length(), getLength(), Collections.singleton("-fx-fill: " + toHexString(color) + ";"));
-    }
-
-    private String toHexString(Color color) {
-        return String.format("#%02X%02X%02X", (int) (color.getRed() * 255),
-                (int) (color.getGreen() * 255),
-                (int) (color.getBlue() * 255));
-    }
 
     public void createCodeArea(Parent root) {
         AnchorPane anchorPane = (AnchorPane) root.lookup("#anchorPaneWithConsole");

@@ -124,7 +124,7 @@ public class Call extends Instruction {
         if(isExpression)
             return new CompError(
                     ErrorType.SEMANTIC,
-                    "A method is not an expression.",
+                    funcId + " is a method, doesn't return anything.",
                     line,
                     column
             );

@@ -53,6 +53,7 @@ public class sym {
   public static final int BRA_END = 28;
   public static final int SBRA_START = 29;
   public static final int MODULO = 56;
+  public static final int TOSTRING = 69;
   public static final int BREAK = 15;
   public static final int LOG = 22;
   public static final int COLON = 19;
@@ -146,7 +147,8 @@ public class sym {
   "NOT",
   "RUN_MAIN",
   "ROUND",
-  "LENGTH"
+  "LENGTH",
+  "TOSTRING"
   };
 }
 

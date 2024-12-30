@@ -48,6 +48,11 @@ public class If extends Instruction {
                 if(i== null) continue;
                 var res = i.interpret(tree, newTable);
                 if (res instanceof CompError) tree.addError((CompError) res);
+                if(symbolsTable.isUncontinued() || symbolsTable.isBroken()){
+                    symbolsTable.setUncontinued(false);
+                    symbolsTable.setBroken(false);
+                    return null;
+                }
             }
         } else if (this.elseInstructions != null){
 

@@ -36,7 +36,7 @@ public class Arr2DAssignment extends Instruction {
         var resPos2 = this.pos1Exp.interpret(tree, symbolsTable);
         if(resPos2 instanceof CompError) return resPos2;
 
-        if(pos1Exp.type.getType() != dataType.WHOLE || pos2Exp.type.getType() != dataType.WHOLE) {
+        if(!(resPos1 instanceof Integer && resPos2 instanceof Integer)) {
             String wrongType = (pos1Exp.type.getType() != dataType.WHOLE) ?
                     pos1Exp.type.getType().getValue() :
                     pos2Exp.type.getType().getValue();
