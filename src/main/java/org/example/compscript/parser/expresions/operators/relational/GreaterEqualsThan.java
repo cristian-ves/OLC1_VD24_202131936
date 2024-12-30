@@ -25,12 +25,12 @@ public class GreaterEqualsThan extends Instruction {
         String desc = "Invalid relational combination >=";
 
         var res1 = this.leftExp.interpret(tree, symbolsTable);
-        if(res1 instanceof Error) {
+        if(res1 instanceof CompError) {
             return res1;
         }
 
         var res2 = this.rightExp.interpret(tree, symbolsTable);
-        if(res2 instanceof Error) {
+        if(res2 instanceof CompError) {
             return res2;
         }
 

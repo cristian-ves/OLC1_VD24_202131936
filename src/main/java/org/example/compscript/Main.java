@@ -11,6 +11,8 @@ import org.example.compscript.parser.abstract_.Instruction;
 import org.example.compscript.parser.analisys.Lexer;
 import org.example.compscript.parser.analisys.Parser;
 import org.example.compscript.parser.exceptions.CompError;
+import org.example.compscript.parser.instructions.declarations.Array2DDeclaration;
+import org.example.compscript.parser.instructions.declarations.ArrayDeclaration;
 import org.example.compscript.parser.instructions.declarations.Declaration;
 import org.example.compscript.parser.instructions.funcs.Method;
 import org.example.compscript.parser.instructions.funcs.RunMain;
@@ -108,8 +110,7 @@ public class Main extends Application {
 
             // second ast loop, declarations and assignments
             for (var a : ast.getInstructions()) {
-                if (a instanceof Declaration) {
-                    // TODO: check arr declarations
+                if (a instanceof Declaration || a instanceof ArrayDeclaration || a instanceof Array2DDeclaration) {
                     var res = a.interpret(ast, table);
                     if (res instanceof CompError) {
                         semanticErrosConsole += res.toString() + "\n";
